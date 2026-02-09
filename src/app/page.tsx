@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { Heart, Moon, Sparkles, Stars } from "lucide-react";
+import Link from "next/link";
 import { StarField } from "@/components/StarField";
 
 export default function HomePage() {
@@ -52,22 +53,24 @@ export default function HomePage() {
 							transition={{ duration: 0.8, delay: 0.6 }}
 							className="pt-8"
 						>
-							<button
-								type="button"
-								className="group relative px-12 py-5 text-lg font-semibold rounded-full overflow-hidden transition-all duration-300 hover:scale-105"
-							>
-								{/* Gradient Background */}
-								<div className="absolute inset-0 bg-gradient-to-r from-[rgb(var(--color-lavender))] to-[rgb(var(--color-celestial-pink))] transition-opacity group-hover:opacity-90" />
+							<Link href="/onboarding">
+								<button
+									type="button"
+									className="group relative px-12 py-5 text-lg font-semibold rounded-full overflow-hidden transition-all duration-300 hover:scale-105"
+								>
+									{/* Gradient Background */}
+									<div className="absolute inset-0 bg-gradient-to-r from-[rgb(var(--color-lavender))] to-[rgb(var(--color-celestial-pink))] transition-opacity group-hover:opacity-90" />
 
-								{/* Shimmer Effect */}
-								<div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-shimmer bg-[length:200%_100%]" />
+									{/* Shimmer Effect */}
+									<div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-shimmer bg-[length:200%_100%]" />
 
-								{/* Button Text */}
-								<span className="relative flex items-center gap-2">
-									<Sparkles className="w-5 h-5" />
-									Discover Your Chart
-								</span>
-							</button>
+									{/* Button Text */}
+									<span className="relative flex items-center gap-2">
+										<Sparkles className="w-5 h-5" />
+										Discover Your Chart
+									</span>
+								</button>
+							</Link>
 						</motion.div>
 
 						{/* Feature Cards */}

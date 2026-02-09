@@ -13,6 +13,7 @@
 		"check": "npm run type-check && npm run lint"
 	},
 	"dependencies": {
+		"astronomy-engine": "^2.1.19",
 		"clsx": "^2.1.1",
 		"framer-motion": "^12.34.0",
 		"lucide-react": "^0.563.0",
