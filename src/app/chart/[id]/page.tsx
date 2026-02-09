@@ -115,10 +115,10 @@ export default async function ChartPage({ params }: { params: Promise<{ id: stri
 				</section>
 
 				{/* Chart Wheel & Synthesis */}
-				<div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24 items-start">
+				<div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24">
 					{/* Wheel */}
 					{chart.houses && chart.houses.length > 0 && (
-						<div className="space-y-8 sticky top-24">
+						<div className="space-y-8 order-2 lg:order-1">
 							<div className="text-center lg:text-left space-y-2">
 								<h2 className="font-[family-name:var(--font-cormorant)] text-3xl text-[rgb(var(--color-cream-white))]">
 									Natal Wheel
@@ -137,7 +137,7 @@ export default async function ChartPage({ params }: { params: Promise<{ id: stri
 					)}
 
 					{/* Synthesis & Personal Planets */}
-					<div className="space-y-16">
+					<div className="space-y-16 order-1 lg:order-2">
 						{/* Personal Planets */}
 						<section className="space-y-8">
 							<div className="space-y-2">
