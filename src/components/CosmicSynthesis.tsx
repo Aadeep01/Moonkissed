@@ -1,8 +1,9 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { Loader2, Sparkles } from "lucide-react";
+import { AnimatePresence, motion } from "framer-motion";
+import { Heart, Loader2, Moon, Sun, Zap } from "lucide-react";
 import { useEffect, useState } from "react";
+import { cn } from "@/lib/utils";
 
 interface CosmicSynthesisProps {
 	sunSign: string;
@@ -14,6 +15,22 @@ interface CosmicSynthesisProps {
 	name: string;
 }
 
+interface SynthesisData {
+	core_identity: string;
+	emotional_world: string;
+	mind_and_heart: string;
+	destiny_path: string;
+}
+
+type TabKey = keyof SynthesisData;
+
+const TABS: { key: TabKey; label: string; icon: React.ReactNode }[] = [
+	{ key: "core_identity", label: "Identity", icon: <Sun className="w-4 h-4" /> },
+	{ key: "emotional_world", label: "Emotion", icon: <Moon className="w-4 h-4" /> },
+	{ key: "mind_and_heart", label: "Love & Mind", icon: <Heart className="w-4 h-4" /> },
+	{ key: "destiny_path", label: "Destiny", icon: <Zap className="w-4 h-4" /> },
+];
+
 export function CosmicSynthesis({
 	sunSign,
 	moonSign,
@@ -23,11 +40,13 @@ export function CosmicSynthesis({
 	marsSign,
 	name,
 }: CosmicSynthesisProps) {
-	const [synthesis, setSynthesis] = useState<string>("");
+	const [synthesis, setSynthesis] = useState<SynthesisData | null>(null);
 	const [isLoading, setIsLoading] = useState(true);
 	const [error, setError] = useState<string | null>(null);
+	const [activeTab, setActiveTab] = useState<TabKey>("core_identity");
 
 	useEffect(() => {
+		let isMounted = true;
 		async function fetchSynthesis() {
 			try {
 				const response = await fetch("/api/synthesis", {
@@ -49,69 +68,115 @@ export function CosmicSynthesis({
 				}
 
 				const data = await response.json();
-				setSynthesis(data.synthesis);
+				if (isMounted) setSynthesis(data.synthesis);
 			} catch (err) {
 				console.error("Synthesis error:", err);
-				setError("The cosmic energies are temporarily misaligned. Please try again.");
+				if (isMounted)
+					setError("The cosmic energies are temporarily misaligned. Please try again.");
 			} finally {
-				setIsLoading(false);
+				if (isMounted) setIsLoading(false);
 			}
 		}
 
 		fetchSynthesis();
+		return () => {
+			isMounted = false;
+		};
 	}, [sunSign, moonSign, risingSign, mercurySign, venusSign, marsSign, name]);
 
-	return (
-		<div className="glass rounded-3xl p-8 md:p-12 space-y-8 relative overflow-hidden group">
-			<div className="absolute top-0 right-0 p-8">
-				<Sparkles className="w-8 h-8 text-[rgb(var(--color-moonlight-gold))] animate-pulse" />
+	if (error) {
+		return (
+			<div className="glass rounded-3xl p-8 border-red-500/20 text-red-200/80 text-center italic">
+				{error}
 			</div>
-			<div className="space-y-6 max-w-3xl">
-				<h2 className="text-3xl font-bold text-[rgb(var(--color-cream-white))]">
-					AI Cosmic Synthesis
-				</h2>
+		);
+	}
 
-				{isLoading && (
-					<motion.div
-						initial={{ opacity: 0 }}
-						animate={{ opacity: 1 }}
-						className="flex items-center gap-4 text-[rgb(var(--color-cream-white))]/70"
-					>
-						<Loader2 className="w-6 h-6 animate-spin" />
-						<p className="text-lg italic">Channeling the celestial wisdom...</p>
-					</motion.div>
-				)}
+	return (
+		<div className="w-full max-w-4xl mx-auto">
+			<div className="bg-[#1A1E29]/60 backdrop-blur-xl border border-white/5 rounded-[2rem] overflow-hidden shadow-2xl relative">
+				{/* Background Glow */}
+				<div className="absolute top-0 left-1/2 -translate-x-1/2 w-96 h-96 bg-[rgb(var(--color-moonlight-gold))]/5 blur-[120px] rounded-full pointer-events-none" />
 
-				{error && (
-					<motion.p
-						initial={{ opacity: 0 }}
-						animate={{ opacity: 1 }}
-						className="text-lg text-red-400/80 italic"
-					>
-						{error}
-					</motion.p>
-				)}
+				{/* Header / Tabs */}
+				<div className="relative z-10 border-b border-white/5">
+					<div className="grid grid-cols-4">
+						{TABS.map((tab) => {
+							const isActive = activeTab === tab.key;
+							return (
+								<button
+									type="button"
+									key={tab.key}
+									onClick={() => setActiveTab(tab.key)}
+									className={cn(
+										"flex flex-col md:flex-row items-center justify-center gap-2 py-4 transition-all duration-300 text-[10px] md:text-xs font-bold uppercase tracking-widest relative group",
+										isActive
+											? "text-[rgb(var(--color-moonlight-gold))]"
+											: "text-white/40 hover:text-white",
+									)}
+								>
+									<span className="relative z-10">{tab.icon}</span>
+									<span className="relative z-10 hidden md:inline">{tab.label}</span>
+									<span className="relative z-10 md:hidden">{tab.label.split(" ")[0]}</span>
 
-				{!isLoading && !error && synthesis && (
-					<motion.div
-						initial={{ opacity: 0, y: 20 }}
-						animate={{ opacity: 1, y: 0 }}
-						transition={{ duration: 0.8 }}
-						className="space-y-4"
-					>
-						{synthesis.split("\n\n").map((paragraph, index) => (
-							<motion.p
-								key={`${paragraph.substring(0, 30)}-${index}`}
-								initial={{ opacity: 0, y: 10 }}
-								animate={{ opacity: 1, y: 0 }}
-								transition={{ delay: index * 0.2, duration: 0.6 }}
-								className="text-lg text-[rgb(var(--color-cream-white))]/80 leading-relaxed"
+									{isActive && (
+										<motion.div
+											layoutId="activeTabIndicator"
+											className="absolute bottom-0 w-full h-[2px] bg-[rgb(var(--color-moonlight-gold))] shadow-[0_0_10px_rgba(244,213,141,0.5)]"
+											transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+										/>
+									)}
+								</button>
+							);
+						})}
+					</div>
+				</div>
+
+				{/* Content */}
+				<div className="relative min-h-[400px] p-8 md:p-12 flex items-center justify-center">
+					<AnimatePresence mode="wait">
+						{isLoading ? (
+							<motion.div
+								key="loader"
+								initial={{ opacity: 0 }}
+								animate={{ opacity: 1 }}
+								exit={{ opacity: 0 }}
+								className="flex flex-col items-center justify-center gap-4 text-[rgb(var(--color-moonlight-gold))]"
 							>
-								{paragraph}
-							</motion.p>
-						))}
-					</motion.div>
-				)}
+								<Loader2 className="w-8 h-8 animate-spin" />
+								<span className="text-xs uppercase tracking-[0.2em] animate-pulse">
+									Divining...
+								</span>
+							</motion.div>
+						) : synthesis ? (
+							<motion.div
+								key={activeTab}
+								initial={{ opacity: 0, y: 10, filter: "blur(10px)" }}
+								animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+								exit={{ opacity: 0, y: -10, filter: "blur(10px)" }}
+								transition={{ duration: 0.5, ease: "easeOut" }}
+								className="w-full max-w-2xl text-center"
+							>
+								<div className="mb-8">
+									<div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-[rgb(var(--color-moonlight-gold))]/10 text-[rgb(var(--color-moonlight-gold))] mb-4 border border-[rgb(var(--color-moonlight-gold))]/20">
+										{TABS.find((t) => t.key === activeTab)?.icon}
+									</div>
+									<h3 className="font-[family-name:var(--font-cormorant)] text-3xl md:text-5xl text-[rgb(var(--color-cream-white))] leading-tight mb-4">
+										{activeTab === "core_identity" && "The Soul's Signature"}
+										{activeTab === "emotional_world" && "The Inner Tides"}
+										{activeTab === "mind_and_heart" && "Thought & Affection"}
+										{activeTab === "destiny_path" && "The Path Forward"}
+									</h3>
+									<div className="h-px w-24 bg-gradient-to-r from-transparent via-[rgb(var(--color-moonlight-gold))]/50 to-transparent mx-auto" />
+								</div>
+
+								<p className="font-[family-name:var(--font-cormorant)] text-xl md:text-2xl leading-relaxed text-[rgb(var(--color-cream-white))]/90 font-light italic">
+									"{synthesis[activeTab]}"
+								</p>
+							</motion.div>
+						) : null}
+					</AnimatePresence>
+				</div>
 			</div>
 		</div>
 	);

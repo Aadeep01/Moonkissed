@@ -5,7 +5,7 @@ import { ArrowLeft, Heart, Shield, Sparkles, Zap } from "lucide-react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { StarField } from "@/components/StarField";
+import { CosmicBackground } from "@/components/CosmicBackground";
 
 interface SynastryResult {
 	score: number;
@@ -52,17 +52,20 @@ export default function SynastryPage() {
 	}, [id1, id2]);
 
 	return (
-		<>
-			<StarField />
-			<main className="min-h-screen py-20 px-4">
+		<div className="min-h-screen bg-[#050810] text-[rgb(var(--color-cream-white))] selection:bg-[rgb(var(--color-moonlight-gold))]/30 relative">
+			<CosmicBackground />
+			<main className="relative z-10 py-20 px-4">
 				<div className="max-w-4xl mx-auto space-y-12">
-					<Link
-						href="/dashboard"
-						className="inline-flex items-center gap-2 text-white/40 hover:text-white transition-colors group"
-					>
-						<ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
-						Back to Gallery
-					</Link>
+					{/* Top Navigation */}
+					<div className="flex items-center justify-start">
+						<Link
+							href="/dashboard"
+							className="inline-flex items-center gap-2 text-white/40 hover:text-white transition-colors group"
+						>
+							<ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
+							Back to Gallery
+						</Link>
+					</div>
 
 					{isLoading ? (
 						<div className="space-y-12 text-center py-20">
@@ -71,14 +74,16 @@ export default function SynastryPage() {
 								<div className="absolute inset-0 blur-2xl bg-[rgb(var(--color-celestial-pink))] opacity-30 animate-pulse" />
 							</div>
 							<div className="space-y-4">
-								<h1 className="text-4xl font-bold text-white">Establishing Connection...</h1>
-								<p className="text-white/40 animate-pulse">
+								<h1 className="font-[family-name:var(--font-cormorant)] text-4xl text-[rgb(var(--color-cream-white))]">
+									Establishing Connection...
+								</h1>
+								<p className="text-white/40 animate-pulse font-[family-name:var(--font-inter)]">
 									Calculating spiritual harmonics between two souls
 								</p>
 							</div>
 						</div>
 					) : error || !result ? (
-						<div className="text-center py-20 glass rounded-3xl border border-white/10 space-y-4">
+						<div className="text-center py-20 bg-[#1A1E29]/40 backdrop-blur-md rounded-3xl border border-white/10 space-y-4">
 							<Zap className="w-12 h-12 text-red-400 mx-auto" />
 							<p className="text-xl text-white/60">{error || "Connection failed."}</p>
 						</div>
@@ -87,16 +92,18 @@ export default function SynastryPage() {
 							{/* Header / Score Section */}
 							<div className="text-center space-y-8">
 								<div className="space-y-2">
-									<h1 className="text-5xl md:text-6xl font-bold text-gradient">
+									<h1 className="font-[family-name:var(--font-cormorant)] text-5xl md:text-6xl text-[rgb(var(--color-cream-white))]">
 										{result.person1.name} & {result.person2.name}
 									</h1>
-									<p className="text-xl text-white/60">Celestial Compatibility Analysis</p>
+									<p className="text-xl text-white/60 font-[family-name:var(--font-inter)]">
+										Celestial Compatibility Analysis
+									</p>
 								</div>
 
 								<div className="relative inline-block group">
 									<div className="absolute inset-0 bg-gradient-to-r from-[rgb(var(--color-lavender))] to-[rgb(var(--color-celestial-pink))] rounded-full blur-3xl opacity-20 group-hover:opacity-40 transition-opacity" />
-									<div className="relative glass p-12 rounded-full border border-white/20 aspect-square flex flex-col items-center justify-center space-y-1">
-										<span className="text-6xl md:text-8xl font-black text-white">
+									<div className="relative bg-[#1A1E29]/40 backdrop-blur-md p-12 rounded-full border border-white/20 aspect-square flex flex-col items-center justify-center space-y-1">
+										<span className="font-[family-name:var(--font-cormorant)] text-6xl md:text-8xl font-black text-white">
 											{result.score}%
 										</span>
 										<span className="text-[rgb(var(--color-moonlight-gold))] font-bold uppercase tracking-[0.2em] text-sm">
@@ -111,21 +118,21 @@ export default function SynastryPage() {
 								initial={{ opacity: 0, y: 30 }}
 								animate={{ opacity: 1, y: 0 }}
 								transition={{ duration: 0.8 }}
-								className="glass rounded-[3rem] p-10 md:p-16 space-y-10 border border-white/10 relative overflow-hidden"
+								className="bg-[#1A1E29]/40 backdrop-blur-md rounded-[3rem] p-10 md:p-16 space-y-10 border border-white/10 relative overflow-hidden"
 							>
 								<div className="absolute top-0 right-0 p-12 opacity-10">
 									<Sparkles className="w-24 h-24 text-[rgb(var(--color-moonlight-gold))]" />
 								</div>
 
 								<div className="space-y-6 relative">
-									<h2 className="text-3xl font-bold text-white italic font-serif">
+									<h2 className="font-[family-name:var(--font-cormorant)] text-3xl text-[rgb(var(--color-cream-white))]">
 										The Spiritual Bond
 									</h2>
 									<div className="space-y-4">
 										{result.interpretation.split("\n\n").map((para, i) => (
 											<p
 												key={`para-${para.substring(0, 30)}-${i}`}
-												className="text-xl text-white/80 leading-relaxed font-serif italic"
+												className="text-xl text-white/80 leading-relaxed font-[family-name:var(--font-inter)]"
 											>
 												{para}
 											</p>
@@ -176,7 +183,7 @@ export default function SynastryPage() {
 
 							{/* Call to action */}
 							<div className="text-center">
-								<p className="text-white/40 italic font-serif text-lg mb-8">
+								<p className="text-white/40 italic font-[family-name:var(--font-cormorant)] text-lg mb-8">
 									"The meeting of two personalities is like the contact of two chemical substances:{" "}
 									<br />
 									if there is any reaction, both are transformed."
@@ -186,6 +193,6 @@ export default function SynastryPage() {
 					)}
 				</div>
 			</main>
-		</>
+		</div>
 	);
 }
