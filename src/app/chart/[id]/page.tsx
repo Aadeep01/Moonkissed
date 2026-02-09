@@ -1,5 +1,6 @@
-import { Calendar, Compass, MapPin, Moon, Sparkles, Stars, Sun } from "lucide-react";
+import { Calendar, Compass, MapPin, Moon, Stars, Sun } from "lucide-react";
 import { notFound } from "next/navigation";
+import { CosmicSynthesis } from "@/components/CosmicSynthesis";
 import { StarField } from "@/components/StarField";
 import dbConnect from "@/lib/mongoose";
 import BirthChart from "@/models/BirthChart";
@@ -67,31 +68,13 @@ export default async function ChartPage({ params }: { params: Promise<{ id: stri
 						/>
 					</div>
 
-					{/* AI Insights Placeholder */}
-					<div className="glass rounded-3xl p-8 md:p-12 space-y-8 relative overflow-hidden group">
-						<div className="absolute top-0 right-0 p-8">
-							<Sparkles className="w-8 h-8 text-[rgb(var(--color-moonlight-gold))] animate-pulse" />
-						</div>
-						<div className="space-y-4 max-w-3xl">
-							<h2 className="text-3xl font-bold text-[rgb(var(--color-cream-white))]">
-								AI Cosmic Synthesis
-							</h2>
-							<p className="text-xl text-[rgb(var(--color-cream-white))]/70 leading-relaxed italic">
-								"The alignment of {chart.sunSign} Sun and {chart.moonSign} Moon suggests a soul that
-								balances deep intensity with profound emotional awareness. Your {chart.risingSign}{" "}
-								Ascendant provides a magnetic presence that draws others toward your unique cosmic
-								light..."
-							</p>
-							<div className="pt-4">
-								<button
-									type="button"
-									className="px-8 py-3 glass hover:bg-white/20 transition-all rounded-full border border-white/20 flex items-center gap-2"
-								>
-									Unlock Full Reading <ArrowRight className="w-4 h-4" />
-								</button>
-							</div>
-						</div>
-					</div>
+					{/* AI Cosmic Synthesis */}
+					<CosmicSynthesis
+						sunSign={chart.sunSign}
+						moonSign={chart.moonSign}
+						risingSign={chart.risingSign}
+						name={chart.name}
+					/>
 				</div>
 			</main>
 		</>
@@ -122,7 +105,7 @@ function SignCard({ title, sign, description, icon }: SignCardProps) {
 	);
 }
 
-function ArrowRight({ className }: { className?: string }) {
+function _ArrowRight({ className }: { className?: string }) {
 	return (
 		<svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor">
 			<title>Arrow Right</title>
