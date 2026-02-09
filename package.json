@@ -13,13 +13,18 @@
 		"check": "npm run type-check && npm run lint"
 	},
 	"dependencies": {
+		"@auth/mongodb-adapter": "^3.11.1",
+		"@types/bcryptjs": "^2.4.6",
 		"astronomy-engine": "^2.1.19",
+		"bcryptjs": "^3.0.3",
 		"clsx": "^2.1.1",
 		"framer-motion": "^12.34.0",
 		"groq-sdk": "^0.37.0",
 		"lucide-react": "^0.563.0",
+		"mongodb": "^7.1.0",
 		"mongoose": "^9.1.6",
 		"next": "^16.1.6",
+		"next-auth": "^4.24.13",
 		"react": "^19.0.0",
 		"react-dom": "^19.0.0",
 		"tailwind-merge": "^3.4.0"

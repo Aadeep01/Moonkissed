@@ -1,8 +1,9 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Calendar, ChevronRight, Moon, Stars, Sun, User } from "lucide-react";
+import { Calendar, ChevronRight, LogOut, Moon, Stars, Sun, User } from "lucide-react";
 import Link from "next/link";
+import { signOut, useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import { DailyHoroscope } from "@/components/DailyHoroscope";
 import { MoonMonitor } from "@/components/MoonMonitor";
@@ -18,6 +19,7 @@ interface ChartSummary {
 }
 
 export default function DashboardPage() {
+	const { data: session } = useSession();
 	const [charts, setCharts] = useState<ChartSummary[]>([]);
 	const [isLoading, setIsLoading] = useState(true);
 	const [compareMode, setCompareMode] = useState(false);
@@ -56,9 +58,19 @@ export default function DashboardPage() {
 					<div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-8 border-b border-white/10">
 						<div className="space-y-2">
 							<h1 className="text-5xl font-bold text-gradient">Cosmic Gallery</h1>
-							<p className="text-white/60 text-lg">Your collection of celestial blueprints</p>
+							<p className="text-white/60 text-lg">
+								{session?.user?.name ? `${session.user.name}'s collection` : "Your collection"} of
+								celestial blueprints
+							</p>
 						</div>
-						<div className="flex items-center gap-4">
+						<div className="flex flex-wrap items-center gap-4">
+							<button
+								type="button"
+								onClick={() => signOut({ callbackUrl: "/" })}
+								className="px-4 py-2 text-xs font-bold uppercase tracking-widest text-white/40 hover:text-white transition-colors flex items-center gap-2"
+							>
+								<LogOut className="w-4 h-4" /> Sign Out
+							</button>
 							<button
 								type="button"
 								onClick={() => {

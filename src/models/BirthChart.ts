@@ -22,6 +22,7 @@ export interface IBirthChart extends Document {
 	marsSign: string;
 	marsLong?: number;
 	houses?: number[];
+	userId?: string;
 	createdAt: Date;
 }
 
@@ -47,6 +48,7 @@ const BirthChartSchema: Schema<IBirthChart> = new Schema({
 	marsSign: { type: String, required: true },
 	marsLong: { type: Number, required: true },
 	houses: [{ type: Number, required: true }],
+	userId: { type: String },
 	createdAt: { type: Date, default: Date.now },
 });
 

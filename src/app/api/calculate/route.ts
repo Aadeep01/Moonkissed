@@ -1,14 +1,17 @@
 import { NextResponse } from "next/server";
+import { getServerSession } from "next-auth";
 import { calculateSigns } from "@/lib/astrology";
 import dbConnect from "@/lib/mongoose";
 import BirthChart from "@/models/BirthChart";
+import { authOptions } from "../auth/[...nextauth]/route";
 
 export async function POST(request: Request) {
 	try {
+		const session = await getServerSession(authOptions);
+
 		await dbConnect();
 		const body = await request.json();
 		const { name, birthDate, birthTime, birthPlace, latitude, longitude } = body;
-		console.log("Received data:", { name, birthDate, birthTime, birthPlace, latitude, longitude });
 
 		if (
 			!name ||
@@ -23,11 +26,9 @@ export async function POST(request: Request) {
 
 		// Prepare original date/time for library
 		const fullBirthDate = new Date(`${birthDate}T${birthTime}`);
-		console.log("Full birth date:", fullBirthDate);
 
 		// Calculate signs
 		const result = calculateSigns(fullBirthDate, latitude, longitude);
-		console.log("Calculated results:", result);
 
 		// Store in database
 		const chart = await BirthChart.create({
@@ -38,13 +39,13 @@ export async function POST(request: Request) {
 			latitude,
 			longitude,
 			...result,
+			userId: session?.user ? (session.user as any).id : undefined,
 		});
 
 		return NextResponse.json({ id: chart._id, ...result });
 	} catch (error) {
 		console.error("Calculation Error:", error);
 		const errorMessage = error instanceof Error ? error.message : "Internal Server Error";
-		const errorStack = error instanceof Error ? error.stack : undefined;
-		return NextResponse.json({ error: errorMessage, stack: errorStack }, { status: 500 });
+		return NextResponse.json({ error: errorMessage }, { status: 500 });
 	}
 }

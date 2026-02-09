@@ -42,6 +42,8 @@ export const metadata: Metadata = {
 	},
 };
 
+import { AuthProvider } from "@/components/AuthProvider";
+
 export default function RootLayout({
 	children,
 }: Readonly<{
@@ -49,7 +51,9 @@ export default function RootLayout({
 }>) {
 	return (
 		<html lang="en" className={`${cormorant.variable} ${inter.variable}`} suppressHydrationWarning>
-			<body className="font-sans">{children}</body>
+			<body className="font-sans">
+				<AuthProvider>{children}</AuthProvider>
+			</body>
 		</html>
 	);
 }
