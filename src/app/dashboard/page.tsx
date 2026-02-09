@@ -5,6 +5,7 @@ import { Calendar, ChevronRight, Moon, Stars, Sun, User } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { DailyHoroscope } from "@/components/DailyHoroscope";
+import { MoonMonitor } from "@/components/MoonMonitor";
 import { StarField } from "@/components/StarField";
 
 interface ChartSummary {
@@ -83,6 +84,9 @@ export default function DashboardPage() {
 							</Link>
 						</div>
 					</div>
+
+					{/* Global Celestial State */}
+					<MoonMonitor />
 
 					{/* Synastry Banner */}
 					{compareMode && (
