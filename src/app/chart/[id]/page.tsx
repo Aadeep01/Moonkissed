@@ -5,11 +5,13 @@ import {
 	MapPin,
 	MessageSquare,
 	Moon,
+	Sparkles,
 	Stars,
 	Sun,
 	Zap,
 } from "lucide-react";
 import { notFound } from "next/navigation";
+import { BirthChartWheel } from "@/components/BirthChartWheel";
 import { CosmicSynthesis } from "@/components/CosmicSynthesis";
 import { StarField } from "@/components/StarField";
 import dbConnect from "@/lib/mongoose";
@@ -30,11 +32,19 @@ export default async function ChartPage({ params }: { params: Promise<{ id: stri
 		notFound();
 	}
 
+	const planetaryData = [
+		{ name: "Sun", symbol: "☉", longitude: chart.sunLong, color: "#fbbf24" },
+		{ name: "Moon", symbol: "☽", longitude: chart.moonLong, color: "#93c5fd" },
+		{ name: "Mercury", symbol: "☿", longitude: chart.mercuryLong, color: "#2dd4bf" },
+		{ name: "Venus", symbol: "♀", longitude: chart.venusLong, color: "#f472b6" },
+		{ name: "Mars", symbol: "♂", longitude: chart.marsLong, color: "#f87171" },
+	];
+
 	return (
 		<>
 			<StarField />
 			<main className="min-h-screen py-20 px-4">
-				<div className="max-w-6xl mx-auto space-y-16">
+				<div className="max-w-6xl mx-auto space-y-24">
 					{/* Header Info */}
 					<div className="text-center space-y-4">
 						<h1 className="text-5xl md:text-6xl font-bold text-gradient">
@@ -56,9 +66,24 @@ export default async function ChartPage({ params }: { params: Promise<{ id: stri
 						</div>
 					</div>
 
+					{/* Visual Birth Chart Wheel */}
+					<div className="space-y-12">
+						<div className="text-center space-y-2">
+							<div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-white/10 glass text-xs font-semibold uppercase tracking-widest text-[rgb(var(--color-moonlight-gold))]">
+								<Sparkles className="w-3 h-3" /> Celestial Alignment
+							</div>
+							<h2 className="text-4xl font-bold text-white">The Wheel of Destiny</h2>
+						</div>
+						<BirthChartWheel
+							planets={planetaryData}
+							houses={chart.houses}
+							ascendant={chart.ascendantLong}
+						/>
+					</div>
+
 					{/* The Big Three Section */}
-					<div className="space-y-8">
-						<h2 className="text-2xl font-bold text-white/40 uppercase tracking-[0.2em] text-center">
+					<div className="space-y-12">
+						<h2 className="text-2xl font-bold text-white/30 uppercase tracking-[0.3em] text-center italic">
 							The Primal Triad
 						</h2>
 						<div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -83,9 +108,20 @@ export default async function ChartPage({ params }: { params: Promise<{ id: stri
 						</div>
 					</div>
 
+					{/* AI Cosmic Synthesis */}
+					<CosmicSynthesis
+						sunSign={chart.sunSign}
+						moonSign={chart.moonSign}
+						risingSign={chart.risingSign}
+						mercurySign={chart.mercurySign}
+						venusSign={chart.venusSign}
+						marsSign={chart.marsSign}
+						name={chart.name}
+					/>
+
 					{/* Internal Planets Section */}
-					<div className="space-y-8">
-						<h2 className="text-2xl font-bold text-white/40 uppercase tracking-[0.2em] text-center">
+					<div className="space-y-12">
+						<h2 className="text-2xl font-bold text-white/30 uppercase tracking-[0.3em] text-center italic">
 							Personal Alignments
 						</h2>
 						<div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -109,17 +145,6 @@ export default async function ChartPage({ params }: { params: Promise<{ id: stri
 							/>
 						</div>
 					</div>
-
-					{/* AI Cosmic Synthesis */}
-					<CosmicSynthesis
-						sunSign={chart.sunSign}
-						moonSign={chart.moonSign}
-						risingSign={chart.risingSign}
-						mercurySign={chart.mercurySign}
-						venusSign={chart.venusSign}
-						marsSign={chart.marsSign}
-						name={chart.name}
-					/>
 				</div>
 			</main>
 		</>

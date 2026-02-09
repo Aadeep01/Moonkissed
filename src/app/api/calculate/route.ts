@@ -26,19 +26,8 @@ export async function POST(request: Request) {
 		console.log("Full birth date:", fullBirthDate);
 
 		// Calculate signs
-		const { sunSign, moonSign, risingSign, mercurySign, venusSign, marsSign } = calculateSigns(
-			fullBirthDate,
-			latitude,
-			longitude,
-		);
-		console.log("Calculated signs:", {
-			sunSign,
-			moonSign,
-			risingSign,
-			mercurySign,
-			venusSign,
-			marsSign,
-		});
+		const result = calculateSigns(fullBirthDate, latitude, longitude);
+		console.log("Calculated results:", result);
 
 		// Store in database
 		const chart = await BirthChart.create({
@@ -48,23 +37,10 @@ export async function POST(request: Request) {
 			birthPlace,
 			latitude,
 			longitude,
-			sunSign,
-			moonSign,
-			risingSign,
-			mercurySign,
-			venusSign,
-			marsSign,
+			...result,
 		});
 
-		return NextResponse.json({
-			id: chart._id,
-			sunSign,
-			moonSign,
-			risingSign,
-			mercurySign,
-			venusSign,
-			marsSign,
-		});
+		return NextResponse.json({ id: chart._id, ...result });
 	} catch (error) {
 		console.error("Calculation Error:", error);
 		const errorMessage = error instanceof Error ? error.message : "Internal Server Error";

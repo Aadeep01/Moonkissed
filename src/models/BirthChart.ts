@@ -8,11 +8,20 @@ export interface IBirthChart extends Document {
 	latitude: number;
 	longitude: number;
 	sunSign: string;
+	sunLong: number;
 	moonSign: string;
+	moonLong: number;
 	risingSign: string;
+	ascendantLong: number;
+	mcSign: string;
+	mcLong: number;
 	mercurySign: string;
+	mercuryLong: number;
 	venusSign: string;
+	venusLong: number;
 	marsSign: string;
+	marsLong: number;
+	houses: number[];
 	createdAt: Date;
 }
 
@@ -24,11 +33,20 @@ const BirthChartSchema: Schema<IBirthChart> = new Schema({
 	latitude: { type: Number, required: true },
 	longitude: { type: Number, required: true },
 	sunSign: { type: String, required: true },
+	sunLong: { type: Number, required: true },
 	moonSign: { type: String, required: true },
+	moonLong: { type: Number, required: true },
 	risingSign: { type: String, required: true },
+	ascendantLong: { type: Number, required: true },
+	mcSign: { type: String, required: true },
+	mcLong: { type: Number, required: true },
 	mercurySign: { type: String, required: true },
+	mercuryLong: { type: Number, required: true },
 	venusSign: { type: String, required: true },
+	venusLong: { type: Number, required: true },
 	marsSign: { type: String, required: true },
+	marsLong: { type: Number, required: true },
+	houses: [{ type: Number, required: true }],
 	createdAt: { type: Date, default: Date.now },
 });
 
