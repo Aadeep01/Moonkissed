@@ -109,17 +109,15 @@ export default mongoose.models.BirthChart ||
 7.  **Dynamic Horoscope Content:** (COMPLETED)
     *   Daily sign-specific readings.
     *   Database-level caching strategy for daily content to optimize API usage.
-8.  **Synastry/Compatibility Engine:**
+8.  **Synastry/Compatibility Engine:** (COMPLETED)
     *   Interface for comparing two saved charts.
     *   AI-driven compatibility analysis with visual scoring.
 
 ### Phase 4: Final Polish and Distribution
 9.  **Celestial Event Tracking:**
     *   Real-time moon phase visualization and interpretative data.
-10. **Export and Sharing:**
-    *   Dynamic image generation for chart sharing (Instagram/Social formats).
-    *   High-fidelity PNG/JPG export capabilities.
-11. **Authentication (Optional/Security):**
+
+10. **Authentication (Security):**
     *   NextAuth.js implementation for account-based chart persistence.
 
 ## Technical Specifications

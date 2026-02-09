@@ -124,7 +124,7 @@ export default function SynastryPage() {
 									<div className="space-y-4">
 										{result.interpretation.split("\n\n").map((para, i) => (
 											<p
-												key={i}
+												key={`para-${para.substring(0, 30)}-${i}`}
 												className="text-xl text-white/80 leading-relaxed font-serif italic"
 											>
 												{para}

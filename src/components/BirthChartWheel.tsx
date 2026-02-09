@@ -112,7 +112,7 @@ export function BirthChartWheel({
 					const p2 = getCoords(deg, innerRadius);
 					return (
 						<line
-							key={`house-${deg}-${i}`}
+							key={`house-divider-${deg}`}
 							x1={p1.x}
 							y1={p1.y}
 							x2={p2.x}

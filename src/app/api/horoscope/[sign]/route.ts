@@ -7,7 +7,7 @@ const groq = new Groq({
 	apiKey: process.env.GROQ_API_KEY,
 });
 
-export async function GET(request: Request, { params }: { params: Promise<{ sign: string }> }) {
+export async function GET(_request: Request, { params }: { params: Promise<{ sign: string }> }) {
 	try {
 		await dbConnect();
 		const { sign } = await params;
