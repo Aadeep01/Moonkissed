@@ -92,33 +92,34 @@ export async function POST(request: Request) {
 						.join("\n")
 				: "No major aspects currently active";
 
-		const prompt = `You are an expert astrologer. Analyze this natal/cosmic chart for ${targetDate}:
+		const prompt = `You are an astrologer. Be direct and concise.
 
-EXACT PLANETARY POSITIONS:
+CHART: ${targetDate}
+
+POSITIONS:
 ${planetInfo}
 
-PLANETARY ASPECTS (calculated from exact degrees):
+ASPECTS: ${significantAspects.length} active
 ${aspectInfo}
 
-MOON: ${moonPhase.phaseName} (${moonPhase.illumination.toFixed(1)}% illuminated)
+MOON: ${moonPhase.phaseName} (${moonPhase.illumination.toFixed(1)}%)
 
-Based on these CALCULATED ASPECTS and positions, interpret the cosmic energy:
+Respond with SHORT sentences (1-2 lines each):
 
-1. "energetic_tone" - What is the CORE energetic quality considering both planetary positions AND their ASPECTS?
-2. "key_aspects" - Which of these calculated aspects (${significantAspects.length} found) are most significant and why?
-3. "retrograde_impact" - How are retrograde planets (if any) affecting the chart's expression?
-4. "supported_actions" - What types of actions/endeavors are cosmically supported right now?
-5. "caution_areas" - Where should one proceed carefully based on challenging aspects?
-6. "power_moment" - Is this a particularly potent moment? Which configurations make it so?
+1. "energetic_tone" - One sentence on the overall energy
+2. "key_aspects" - 1-2 most significant aspects briefly
+3. "retrograde_impact" - Any retrogrades affecting the chart
+4. "supported_actions" - What actions are favored (1-2 items)
+5. "caution_areas" - What to avoid (1-2 items)
+6. "power_moment" - Is it potent? Yes/no + brief why
 
-Return ONLY valid JSON with string values. Reference the SPECIFIC ASPECTS (e.g., "Mars Square Venus") not just generic zodiac meanings.`;
+Keep it brief. No poetic language.`;
 
 		const completion = await groq.chat.completions.create({
 			messages: [
 				{
 					role: "system",
-					content:
-						"You are a master astronomical interpreter who reads the precise language of the cosmos based on exact planetary positions and degrees.",
+					content: "You are a direct astrologer. Keep responses brief and actionable.",
 				},
 				{
 					role: "user",
@@ -126,9 +127,8 @@ Return ONLY valid JSON with string values. Reference the SPECIFIC ASPECTS (e.g.,
 				},
 			],
 			model: "llama-3.3-70b-versatile",
-			temperature: 0.8,
-			max_tokens: 1500,
-			top_p: 0.9,
+			temperature: 0.5,
+			max_tokens: 800,
 			response_format: { type: "json_object" },
 		});
 
