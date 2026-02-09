@@ -3,7 +3,7 @@ import { getServerSession } from "next-auth";
 import { calculateSigns } from "@/lib/astrology";
 import dbConnect from "@/lib/mongoose";
 import BirthChart from "@/models/BirthChart";
-import { authOptions } from "../auth/[...nextauth]/route";
+import { authOptions } from "@/lib/auth";
 
 export async function POST(request: Request) {
 	try {
