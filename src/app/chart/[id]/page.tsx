@@ -67,19 +67,21 @@ export default async function ChartPage({ params }: { params: Promise<{ id: stri
 					</div>
 
 					{/* Visual Birth Chart Wheel */}
-					<div className="space-y-12">
-						<div className="text-center space-y-2">
-							<div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-white/10 glass text-xs font-semibold uppercase tracking-widest text-[rgb(var(--color-moonlight-gold))]">
-								<Sparkles className="w-3 h-3" /> Celestial Alignment
+					{chart.houses && chart.houses.length > 0 && (
+						<div className="space-y-12">
+							<div className="text-center space-y-2">
+								<div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-white/10 glass text-xs font-semibold uppercase tracking-widest text-[rgb(var(--color-moonlight-gold))]">
+									<Sparkles className="w-3 h-3" /> Celestial Alignment
+								</div>
+								<h2 className="text-4xl font-bold text-white">The Wheel of Destiny</h2>
 							</div>
-							<h2 className="text-4xl font-bold text-white">The Wheel of Destiny</h2>
+							<BirthChartWheel
+								planets={planetaryData}
+								houses={chart.houses}
+								ascendant={chart.ascendantLong}
+							/>
 						</div>
-						<BirthChartWheel
-							planets={planetaryData}
-							houses={chart.houses}
-							ascendant={chart.ascendantLong}
-						/>
-					</div>
+					)}
 
 					{/* The Big Three Section */}
 					<div className="space-y-12">

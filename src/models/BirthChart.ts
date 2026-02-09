@@ -8,20 +8,20 @@ export interface IBirthChart extends Document {
 	latitude: number;
 	longitude: number;
 	sunSign: string;
-	sunLong: number;
+	sunLong?: number;
 	moonSign: string;
-	moonLong: number;
+	moonLong?: number;
 	risingSign: string;
-	ascendantLong: number;
-	mcSign: string;
-	mcLong: number;
+	ascendantLong?: number;
+	mcSign?: string;
+	mcLong?: number;
 	mercurySign: string;
-	mercuryLong: number;
+	mercuryLong?: number;
 	venusSign: string;
-	venusLong: number;
+	venusLong?: number;
 	marsSign: string;
-	marsLong: number;
-	houses: number[];
+	marsLong?: number;
+	houses?: number[];
 	createdAt: Date;
 }
 

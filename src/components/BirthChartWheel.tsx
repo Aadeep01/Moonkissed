@@ -28,7 +28,11 @@ const ZODIAC_SIGNS = [
 	{ name: "Pisces", symbol: "♓︎" },
 ];
 
-export function BirthChartWheel({ planets, houses, ascendant }: BirthChartWheelProps) {
+export function BirthChartWheel({
+	planets = [],
+	houses = [],
+	ascendant = 0,
+}: BirthChartWheelProps) {
 	const size = 600;
 	const center = size / 2;
 	const radius = size * 0.45;
@@ -37,7 +41,7 @@ export function BirthChartWheel({ planets, houses, ascendant }: BirthChartWheelP
 	const innerRadius = radius * 0.2;
 
 	// Rotate the wheel so the Ascendant is at 180 degrees (left side)
-	const rotationOffset = 180 - ascendant;
+	const rotationOffset = 180 - (ascendant || 0);
 
 	const getCoords = (deg: number, r: number) => {
 		const rad = ((deg + rotationOffset) * Math.PI) / 180;
