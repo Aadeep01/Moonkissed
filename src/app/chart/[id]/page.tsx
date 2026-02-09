@@ -14,6 +14,7 @@ import { notFound } from "next/navigation";
 import { BirthChartWheel } from "@/components/BirthChartWheel";
 import { CosmicBackground } from "@/components/CosmicBackground";
 import { CosmicSynthesis } from "@/components/CosmicSynthesis";
+import { ExactAstronomyReport } from "@/components/ExactAstronomyReport";
 import dbConnect from "@/lib/mongoose";
 import BirthChart from "@/models/BirthChart";
 import { ChartPageHeader } from "./ChartPageHeader";
@@ -226,6 +227,21 @@ export default async function ChartPage({ params }: { params: Promise<{ id: stri
 									marsSign={chart.marsSign}
 									name={chart.name}
 								/>
+							</div>
+						</section>
+
+						{/* Exact Astronomy Report */}
+						<section className="space-y-8">
+							<div className="space-y-2">
+								<h2 className="font-[family-name:var(--font-cormorant)] text-3xl text-[rgb(var(--color-cream-white))]">
+									Exact Astronomical Data
+								</h2>
+								<p className="text-white/40 text-sm font-[family-name:var(--font-inter)]">
+									Precise planetary positions and astronomical events
+								</p>
+							</div>
+							<div className="glass rounded-[2rem] p-8 border border-white/5 relative bg-[#1A1E29]/40 backdrop-blur-md">
+								<ExactAstronomyReport />
 							</div>
 						</section>
 					</div>

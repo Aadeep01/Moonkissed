@@ -37,6 +37,16 @@ export interface AstrologyResult {
 	venusLong: number;
 	marsSign: string;
 	marsLong: number;
+	jupiterSign?: string;
+	jupiterLong?: number;
+	saturnSign?: string;
+	saturnLong?: number;
+	uranusSign?: string;
+	uranusLong?: number;
+	neptuneSign?: string;
+	neptuneLong?: number;
+	plutoSign?: string;
+	plutoLong?: number;
 	houses: number[]; // Ecliptic longitudes of the 12 house cusps
 }
 
@@ -70,7 +80,23 @@ export function calculateSigns(date: Date, latitude: number, longitude: number):
 	const marsLong = EclipticLongitude(Body.Mars, astroTime);
 	const marsSign = getZodiacSign(marsLong);
 
-	// 6. Angles and Sidereal Time
+	// 6. Outer Planets
+	const jupiterLong = EclipticLongitude(Body.Jupiter, astroTime);
+	const jupiterSign = getZodiacSign(jupiterLong);
+
+	const saturnLong = EclipticLongitude(Body.Saturn, astroTime);
+	const saturnSign = getZodiacSign(saturnLong);
+
+	const uranusLong = EclipticLongitude(Body.Uranus, astroTime);
+	const uranusSign = getZodiacSign(uranusLong);
+
+	const neptuneLong = EclipticLongitude(Body.Neptune, astroTime);
+	const neptuneSign = getZodiacSign(neptuneLong);
+
+	const plutoLong = EclipticLongitude(Body.Pluto, astroTime);
+	const plutoSign = getZodiacSign(plutoLong);
+
+	// 7. Angles and Sidereal Time
 	const gstHours = SiderealTime(astroTime);
 	const lstHours = (gstHours + longitude / 15.0 + 24.0) % 24.0;
 	const lstRadians = (lstHours * Math.PI) / 12.0;
@@ -113,6 +139,16 @@ export function calculateSigns(date: Date, latitude: number, longitude: number):
 		venusLong,
 		marsSign,
 		marsLong,
+		jupiterSign,
+		jupiterLong,
+		saturnSign,
+		saturnLong,
+		uranusSign,
+		uranusLong,
+		neptuneSign,
+		neptuneLong,
+		plutoSign,
+		plutoLong,
 		houses,
 	};
 }

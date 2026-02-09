@@ -21,6 +21,16 @@ export interface IBirthChart extends Document {
 	venusLong?: number;
 	marsSign: string;
 	marsLong?: number;
+	jupiterSign?: string;
+	jupiterLong?: number;
+	saturnSign?: string;
+	saturnLong?: number;
+	uranusSign?: string;
+	uranusLong?: number;
+	neptuneSign?: string;
+	neptuneLong?: number;
+	plutoSign?: string;
+	plutoLong?: number;
 	houses?: number[];
 	userId?: string;
 	createdAt: Date;
@@ -47,6 +57,16 @@ const BirthChartSchema: Schema<IBirthChart> = new Schema({
 	venusLong: { type: Number, required: true },
 	marsSign: { type: String, required: true },
 	marsLong: { type: Number, required: true },
+	jupiterSign: { type: String },
+	jupiterLong: { type: Number },
+	saturnSign: { type: String },
+	saturnLong: { type: Number },
+	uranusSign: { type: String },
+	uranusLong: { type: Number },
+	neptuneSign: { type: String },
+	neptuneLong: { type: Number },
+	plutoSign: { type: String },
+	plutoLong: { type: Number },
 	houses: [{ type: Number, required: true }],
 	userId: { type: String },
 	createdAt: { type: Date, default: Date.now },
