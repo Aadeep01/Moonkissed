@@ -14,6 +14,58 @@ interface PlanetData {
 	speed: number;
 }
 
+interface Aspect {
+	planet1: string;
+	planet2: string;
+	aspect: string;
+	orb: number;
+}
+
+const ASPECT_TYPES = [
+	{ name: "Conjunction", angle: 0, orb: 8, meaning: "Blending of energies" },
+	{ name: "Sextile", angle: 60, orb: 6, meaning: "Harmonious opportunity" },
+	{ name: "Square", angle: 90, orb: 8, meaning: "Tension requiring adjustment" },
+	{ name: "Trine", angle: 120, orb: 8, meaning: "Natural flow" },
+	{ name: "Opposition", angle: 180, orb: 8, meaning: "Polarities seeking integration" },
+];
+
+function calculateAspect(p1Lon: number, p2Lon: number): Aspect | null {
+	let diff = Math.abs(p1Lon - p2Lon);
+	if (diff > 180) diff = 360 - diff;
+
+	for (const asp of ASPECT_TYPES) {
+		const orb = Math.abs(diff - asp.angle);
+		if (orb <= asp.orb) {
+			return { planet1: "", planet2: "", aspect: asp.name, orb };
+		}
+	}
+	return null;
+}
+
+function calculateAspects(planets: PlanetData[]): Aspect[] {
+	const aspects: Aspect[] = [];
+	const planetPairs: [string, number][] = planets.map((p) => [p.name, p.longitude]);
+
+	for (let i = 0; i < planetPairs.length; i++) {
+		const p1 = planetPairs[i];
+		if (!p1) continue;
+		for (let j = i + 1; j < planetPairs.length; j++) {
+			const p2 = planetPairs[j];
+			if (!p2) continue;
+			const aspect = calculateAspect(p1[1], p2[1]);
+			if (aspect) {
+				aspects.push({
+					...aspect,
+					planet1: p1[0],
+					planet2: p2[0],
+				});
+			}
+		}
+	}
+
+	return aspects.sort((a, b) => a.orb - b.orb);
+}
+
 export async function POST(request: Request) {
 	try {
 		const body = await request.json();
@@ -23,40 +75,43 @@ export async function POST(request: Request) {
 			return NextResponse.json({ error: "Missing astronomical data" }, { status: 400 });
 		}
 
-		// Format planet data for the prompt
 		const planetInfo = planets
 			.map((p: PlanetData) => {
 				const retroStatus = p.isRetrograde ? " [RETROGRADE]" : "";
-				return `${p.name}: ${p.zodiacSign} ${p.zodiacDegree.toFixed(2)}°${retroStatus} (Speed: ${p.speed.toFixed(4)}°/day)`;
+				return `${p.name}: ${p.zodiacSign} ${p.zodiacDegree.toFixed(2)}°${retroStatus}`;
 			})
 			.join("\n");
 
-		const prompt = `You are an expert astronomical interpreter. Analyze the EXACT planetary positions for ${targetDate} and provide a precise cosmic forecast.
+		const aspects = calculateAspects(planets);
+		const significantAspects = aspects.slice(0, 8);
+
+		const aspectInfo =
+			significantAspects.length > 0
+				? significantAspects
+						.map((a) => `${a.planet1} ${a.aspect} ${a.planet2} (orb: ${a.orb.toFixed(1)}°)`)
+						.join("\n")
+				: "No major aspects currently active";
+
+		const prompt = `You are an expert astrologer. Analyze this natal/cosmic chart for ${targetDate}:
 
 EXACT PLANETARY POSITIONS:
 ${planetInfo}
 
-MOON PHASE: ${moonPhase.phaseName} (${moonPhase.illumination.toFixed(1)}% illuminated)
+PLANETARY ASPECTS (calculated from exact degrees):
+${aspectInfo}
 
-Based on these PRECISE astronomical positions (not generic sign meanings), provide:
+MOON: ${moonPhase.phaseName} (${moonPhase.illumination.toFixed(1)}% illuminated)
 
-1. What is the energetic tone of this moment based on exact degrees?
-2. Which planetary configurations are most significant right now?
-3. What actions or themes are supported by these specific alignments?
-4. What should be approached with caution given these exact positions?
+Based on these CALCULATED ASPECTS and positions, interpret the cosmic energy:
 
-Provide your interpretation in a flowing, poetic yet precise manner. Focus on the EXACT degrees and positions, not generic zodiac sign descriptions. Consider retrograde motion and planetary speeds in your analysis.
+1. "energetic_tone" - What is the CORE energetic quality considering both planetary positions AND their ASPECTS?
+2. "key_aspects" - Which of these calculated aspects (${significantAspects.length} found) are most significant and why?
+3. "retrograde_impact" - How are retrograde planets (if any) affecting the chart's expression?
+4. "supported_actions" - What types of actions/endeavors are cosmically supported right now?
+5. "caution_areas" - Where should one proceed carefully based on challenging aspects?
+6. "power_moment" - Is this a particularly potent moment? Which configurations make it so?
 
-Return ONLY a valid JSON object with these exact keys:
-{
-  "energetic_tone": "A paragraph describing the precise energetic quality of this moment based on exact planetary positions.",
-  "key_alignments": "A paragraph highlighting the most significant exact degree-based configurations right now.",
-  "supported_actions": "Specific guidance on what types of activities or themes are cosmically aligned at this exact moment.",
-  "caution_areas": "What should be approached carefully given these precise astronomical positions.",
-  "power_moment": "Is this a particularly powerful or significant moment? Why or why not based on the data?"
-}
-
-Use evocative, precise language that references the actual degrees and positions. No generic horoscope language.`;
+Return ONLY valid JSON with string values. Reference the SPECIFIC ASPECTS (e.g., "Mars Square Venus") not just generic zodiac meanings.`;
 
 		const completion = await groq.chat.completions.create({
 			messages: [

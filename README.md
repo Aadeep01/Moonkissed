@@ -6,11 +6,15 @@ Moonkissed is a high-end, personalized astrology platform designed to provide us
 
 ### Astrological Engine
 - Precise calculation of Sun, Moon, and Rising signs based on tropical astrology standards.
+- Exact astronomy calculations: planetary positions, zodiac signs, degrees, and retrograde status.
+- Planetary aspect calculations (Conjunction, Sextile, Square, Trine, Opposition) with orbs.
 - Detailed planetary positions including Mercury, Venus, Mars, and House Cusps.
 - Interactive SVG-based birth chart wheel visualization.
 
 ### AI-Powered Insights
 - Personalized birth chart interpretations using advanced language models via Groq SDK.
+- Exact astronomy feature with precise planetary degree calculations.
+- Synastry forecast with calculated astrological aspects between two charts.
 - Daily sign-specific horoscopes with a sophisticated MongoDB caching strategy.
 - Synastry and compatibility analysis between multiple saved charts.
 

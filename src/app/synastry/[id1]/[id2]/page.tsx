@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { CosmicBackground } from "@/components/CosmicBackground";
+import { SynastryForecast } from "@/components/SynastryForecast";
 
 interface SynastryResult {
 	score: number;
@@ -14,6 +15,8 @@ interface SynastryResult {
 	challenges: string[];
 	person1: { name: string; sunSign: string };
 	person2: { name: string; sunSign: string };
+	person1Chart: Record<string, unknown>;
+	person2Chart: Record<string, unknown>;
 }
 
 export default function SynastryPage() {
@@ -189,6 +192,26 @@ export default function SynastryPage() {
 									if there is any reaction, both are transformed."
 								</p>
 							</div>
+
+							{/* Synastry Forecast Section */}
+							{result && (
+								<section className="space-y-8">
+									<div className="space-y-2">
+										<h2 className="font-[family-name:var(--font-cormorant)] text-3xl text-[rgb(var(--color-cream-white))]">
+											Relationship Forecast
+										</h2>
+										<p className="text-white/40 text-sm font-[family-name:var(--font-inter)]">
+											See how your connection evolves over time
+										</p>
+									</div>
+									<div className="glass rounded-[2rem] p-8 border border-white/5 relative bg-[#1A1E29]/40 backdrop-blur-md">
+										<SynastryForecast
+											person1Chart={result.person1Chart}
+											person2Chart={result.person2Chart}
+										/>
+									</div>
+								</section>
+							)}
 						</div>
 					)}
 				</div>

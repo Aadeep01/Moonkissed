@@ -66,6 +66,8 @@ Format the response as JSON:
 			...result,
 			person1: { name: chart1.name, sunSign: chart1.sunSign },
 			person2: { name: chart2.name, sunSign: chart2.sunSign },
+			person1Chart: JSON.parse(JSON.stringify(chart1)),
+			person2Chart: JSON.parse(JSON.stringify(chart2)),
 		});
 	} catch (error) {
 		console.error("Synastry Error:", error);
