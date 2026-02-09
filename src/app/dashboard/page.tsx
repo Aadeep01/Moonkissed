@@ -66,7 +66,7 @@ export default function DashboardPage() {
 						<div className="flex flex-wrap items-center gap-4">
 							<button
 								type="button"
-								onClick={() => signOut({ callbackUrl: "/" })}
+								onClick={() => signOut({ callbackUrl: "/auth/signin" })}
 								className="px-4 py-2 text-xs font-bold uppercase tracking-widest text-white/40 hover:text-white transition-colors flex items-center gap-2"
 							>
 								<LogOut className="w-4 h-4" /> Sign Out

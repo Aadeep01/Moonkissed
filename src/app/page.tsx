@@ -3,9 +3,12 @@
 import { motion } from "framer-motion";
 import { Heart, Moon, Sparkles, Stars } from "lucide-react";
 import Link from "next/link";
+import { useSession } from "next-auth/react";
 import { StarField } from "@/components/StarField";
 
 export default function HomePage() {
+	const { data: session } = useSession();
+
 	return (
 		<>
 			<StarField />
@@ -46,17 +49,17 @@ export default function HomePage() {
 							Your cosmic blueprint, beautifully revealed
 						</motion.p>
 
-						{/* CTA Buttons */}
+						{/* CTA Button */}
 						<motion.div
 							initial={{ opacity: 0, y: 20 }}
 							animate={{ opacity: 1, y: 0 }}
 							transition={{ duration: 0.8, delay: 0.6 }}
-							className="pt-8 flex flex-col sm:flex-row items-center justify-center gap-4"
+							className="pt-8 flex justify-center"
 						>
-							<Link href="/onboarding">
+							<Link href="/dashboard">
 								<button
 									type="button"
-									className="group relative px-12 py-5 text-lg font-semibold rounded-full overflow-hidden transition-all duration-300 hover:scale-105 min-w-[240px]"
+									className="group relative px-12 py-5 text-lg font-semibold rounded-full overflow-hidden transition-all duration-300 hover:scale-105 min-w-[280px]"
 								>
 									{/* Gradient Background */}
 									<div className="absolute inset-0 bg-gradient-to-r from-[rgb(var(--color-lavender))] to-[rgb(var(--color-celestial-pink))] transition-opacity group-hover:opacity-90" />
@@ -65,19 +68,10 @@ export default function HomePage() {
 									<div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-shimmer bg-[length:200%_100%]" />
 
 									{/* Button Text */}
-									<span className="relative flex items-center justify-center gap-2">
-										<Sparkles className="w-5 h-5" />
-										Discover Your Chart
+									<span className="relative flex items-center justify-center gap-2 text-[rgb(var(--color-deep-space))]">
+										<Sparkles className="w-5 h-5 transition-transform group-hover:rotate-12" />
+										{session ? "Enter Your Gallery" : "Discover Your Chart"}
 									</span>
-								</button>
-							</Link>
-
-							<Link href="/dashboard">
-								<button
-									type="button"
-									className="px-12 py-5 text-lg font-semibold rounded-full border border-white/20 hover:bg-white/5 transition-all duration-300 min-w-[240px]"
-								>
-									View Cosmic Gallery
 								</button>
 							</Link>
 						</motion.div>
