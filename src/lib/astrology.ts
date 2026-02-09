@@ -26,10 +26,13 @@ export interface AstrologyResult {
 	sunSign: string;
 	moonSign: string;
 	risingSign: string;
+	mercurySign: string;
+	venusSign: string;
+	marsSign: string;
 }
 
 /**
- * Calculates Sun, Moon, and Rising signs.
+ * Calculates Sun, Moon, Rising, and personal planets.
  * @param date The birth date and time.
  * @param latitude Geographic latitude.
  * @param longitude Geographic longitude.
@@ -45,7 +48,19 @@ export function calculateSigns(date: Date, latitude: number, longitude: number):
 	const moonLong = EclipticLongitude(Body.Moon, astroTime);
 	const moonSign = getZodiacSign(moonLong);
 
-	// 3. Rising Sign (Ascendant)
+	// 3. Mercury Sign
+	const mercuryLong = EclipticLongitude(Body.Mercury, astroTime);
+	const mercurySign = getZodiacSign(mercuryLong);
+
+	// 4. Venus Sign
+	const venusLong = EclipticLongitude(Body.Venus, astroTime);
+	const venusSign = getZodiacSign(venusLong);
+
+	// 5. Mars Sign
+	const marsLong = EclipticLongitude(Body.Mars, astroTime);
+	const marsSign = getZodiacSign(marsLong);
+
+	// 6. Rising Sign (Ascendant)
 	// Greenwich Apparent Sidereal Time in hours
 	const gstHours = SiderealTime(astroTime);
 
@@ -76,5 +91,8 @@ export function calculateSigns(date: Date, latitude: number, longitude: number):
 		sunSign,
 		moonSign,
 		risingSign,
+		mercurySign,
+		venusSign,
+		marsSign,
 	};
 }

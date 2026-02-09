@@ -8,7 +8,7 @@ const groq = new Groq({
 export async function POST(request: Request) {
 	try {
 		const body = await request.json();
-		const { sunSign, moonSign, risingSign, name } = body;
+		const { sunSign, moonSign, risingSign, mercurySign, venusSign, marsSign, name } = body;
 
 		if (!sunSign || !moonSign || !risingSign) {
 			return NextResponse.json({ error: "Missing astrological signs" }, { status: 400 });
@@ -16,18 +16,21 @@ export async function POST(request: Request) {
 
 		const prompt = `You are a mystical astrologer with deep knowledge of celestial wisdom. Generate a personalized, poetic cosmic synthesis for someone with the following birth chart:
 
-Sun Sign: ${sunSign}
-Moon Sign: ${moonSign}
-Rising Sign (Ascendant): ${risingSign}
+Sun Sign (Identity): ${sunSign}
+Moon Sign (Emotion): ${moonSign}
+Rising Sign (Persona): ${risingSign}
+Mercury Sign (Mind): ${mercurySign}
+Venus Sign (Heart): ${venusSign}
+Mars Sign (Drive): ${marsSign}
 ${name ? `Name: ${name}` : ""}
 
-Create a 3-4 paragraph reading that:
-1. Explains how their ${sunSign} Sun (core identity) interacts with their ${moonSign} Moon (emotional nature)
-2. Describes how their ${risingSign} Rising sign shapes how they present themselves to the world
-3. Weaves these three energies into a cohesive narrative about their soul's journey
-4. Uses evocative, mystical language that feels premium and profound
+Create a comprehensive 4-5 paragraph reading that:
+1. Explains the core tension and harmony between their ${sunSign} Sun and ${moonSign} Moon.
+2. Describes how their ${risingSign} Rising sign acts as the gateway for their ${mercurySign} mind and ${venusSign} heart.
+3. Touches upon how their ${marsSign} drive provides the energy to fulfill their ${sunSign} destiny.
+4. Weaves all six celestial signatures into a cohesive narrative about their soul's specific purpose.
 
-Write in second person ("you"), be specific to these exact sign combinations, and make it feel like a personalized oracle reading. Avoid generic horoscope language.`;
+Write in second person ("you"), be specific to these exact sign combinations, and use evocative, mystical, premium language. Avoid clichéd horoscope generalities.`;
 
 		const completion = await groq.chat.completions.create({
 			messages: [

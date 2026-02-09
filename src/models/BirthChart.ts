@@ -10,6 +10,9 @@ export interface IBirthChart extends Document {
 	sunSign: string;
 	moonSign: string;
 	risingSign: string;
+	mercurySign: string;
+	venusSign: string;
+	marsSign: string;
 	createdAt: Date;
 }
 
@@ -23,6 +26,9 @@ const BirthChartSchema: Schema<IBirthChart> = new Schema({
 	sunSign: { type: String, required: true },
 	moonSign: { type: String, required: true },
 	risingSign: { type: String, required: true },
+	mercurySign: { type: String, required: true },
+	venusSign: { type: String, required: true },
+	marsSign: { type: String, required: true },
 	createdAt: { type: Date, default: Date.now },
 });
 

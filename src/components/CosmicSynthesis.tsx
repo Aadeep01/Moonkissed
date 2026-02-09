@@ -8,10 +8,21 @@ interface CosmicSynthesisProps {
 	sunSign: string;
 	moonSign: string;
 	risingSign: string;
+	mercurySign: string;
+	venusSign: string;
+	marsSign: string;
 	name: string;
 }
 
-export function CosmicSynthesis({ sunSign, moonSign, risingSign, name }: CosmicSynthesisProps) {
+export function CosmicSynthesis({
+	sunSign,
+	moonSign,
+	risingSign,
+	mercurySign,
+	venusSign,
+	marsSign,
+	name,
+}: CosmicSynthesisProps) {
 	const [synthesis, setSynthesis] = useState<string>("");
 	const [isLoading, setIsLoading] = useState(true);
 	const [error, setError] = useState<string | null>(null);
@@ -22,7 +33,15 @@ export function CosmicSynthesis({ sunSign, moonSign, risingSign, name }: CosmicS
 				const response = await fetch("/api/synthesis", {
 					method: "POST",
 					headers: { "Content-Type": "application/json" },
-					body: JSON.stringify({ sunSign, moonSign, risingSign, name }),
+					body: JSON.stringify({
+						sunSign,
+						moonSign,
+						risingSign,
+						mercurySign,
+						venusSign,
+						marsSign,
+						name,
+					}),
 				});
 
 				if (!response.ok) {
@@ -40,7 +59,7 @@ export function CosmicSynthesis({ sunSign, moonSign, risingSign, name }: CosmicS
 		}
 
 		fetchSynthesis();
-	}, [sunSign, moonSign, risingSign, name]);
+	}, [sunSign, moonSign, risingSign, mercurySign, venusSign, marsSign, name]);
 
 	return (
 		<div className="glass rounded-3xl p-8 md:p-12 space-y-8 relative overflow-hidden group">
