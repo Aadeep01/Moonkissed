@@ -153,6 +153,7 @@ export default function DashboardPage() {
 						</div>
 					) : (
 						<motion.div
+							key={compareMode ? "compare" : "gallery"}
 							initial="hidden"
 							animate="show"
 							variants={{
