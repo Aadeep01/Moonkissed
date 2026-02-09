@@ -14,26 +14,24 @@ export default function HomePage() {
 		offset: ["start start", "end start"],
 	});
 
-	// Parallax effects
-	// Hero stays mostly static, maybe subtle blur or parallax
-	// Parallax effects
-	const heroBlur = useTransform(scrollYProgress, [0, 1], ["0px", "5px"]);
-	const heroScale = useTransform(scrollYProgress, [0, 1], [1, 0.98]);
-
 	// Paper Sheet Animation
-	// Slides up from the bottom (100% -> 0%)
-	const sheetY = useTransform(scrollYProgress, [0, 1], ["100vh", "0vh"]);
+	// Slides up from the bottom (100% -> negative to reveal content fully)
+	const sheetY = useTransform(scrollYProgress, [0, 1], ["100vh", "-63vh"]);
+
+	// Moonkissed section effects on scroll
+	const moonkissedOpacity = useTransform(scrollYProgress, [0, 0.5], [1, 0.3]);
+	const moonkissedScale = useTransform(scrollYProgress, [0, 0.5], [1, 0.95]);
 
 	return (
-		<div ref={containerRef} className="relative h-[150vh] bg-[rgb(var(--color-deep-space))]">
+		<div ref={containerRef} className="relative h-[200vh] bg-[rgb(var(--color-deep-space))]">
 			<CosmicBackground />
 
-			{/* Fixed Hero Section - Acts as the 'Background' Layer */}
+			{/* Fixed Hero Section - Stays in place on scroll */}
 			<motion.div
-				style={{ filter: heroBlur, scale: heroScale }}
-				className="sticky top-0 h-screen w-full flex flex-col items-center justify-center overflow-hidden"
+				style={{ opacity: moonkissedOpacity, scale: moonkissedScale }}
+				className="fixed top-0 left-0 w-full h-screen flex flex-col items-center justify-center overflow-hidden z-10"
 			>
-				{/* Outer Circle - Elegant Varying Orbit */}
+				{/* Outer Circle - Full Ring */}
 				<motion.div
 					initial={{ opacity: 0, scale: 0.8, rotate: 0 }}
 					animate={{
@@ -46,38 +44,23 @@ export default function HomePage() {
 						scale: { duration: 1.5, ease: "easeOut" },
 						rotate: { duration: 90, repeat: Infinity, ease: "linear" },
 					}}
-					className="absolute w-[300px] h-[300px] md:w-[600px] md:h-[600px] border border-[rgb(var(--color-moonlight-gold))]/10 rounded-full -z-10"
+					className="absolute w-[300px] h-[300px] md:w-[600px] md:h-[600px] border border-[rgb(var(--color-moonlight-gold))]/15 rounded-full -z-10"
 				/>
 
-				{/* Inner Accents - Dynamic Gyroscope - FIXED BORDERS */}
+				{/* Inner Crescent - Rotating Half Moon */}
 				<motion.div
-					initial={{ opacity: 0, scale: 0.9, rotate: 0 }}
+					initial={{ opacity: 0, scale: 0.9, rotate: -45 }}
 					animate={{
 						opacity: 1,
 						scale: 1,
-						rotate: -360,
+						rotate: 315,
 					}}
 					transition={{
 						opacity: { duration: 1.5, ease: "easeOut", delay: 0.2 },
 						scale: { duration: 1.5, ease: "easeOut", delay: 0.2 },
-						rotate: { duration: 120, repeat: Infinity, ease: "linear" },
+						rotate: { duration: 100, repeat: Infinity, ease: "linear" },
 					}}
-					className="absolute w-[280px] h-[280px] md:w-[580px] md:h-[580px] rounded-full -z-10 border-t border-b border-[rgb(var(--color-moonlight-gold))]/20"
-				/>
-
-				<motion.div
-					initial={{ opacity: 0, scale: 0.9, rotate: 45 }}
-					animate={{
-						opacity: 1,
-						scale: 1,
-						rotate: -315,
-					}}
-					transition={{
-						opacity: { duration: 1.5, ease: "easeOut", delay: 0.4 },
-						scale: { duration: 1.5, ease: "easeOut", delay: 0.4 },
-						rotate: { duration: 60, repeat: Infinity, ease: "linear" },
-					}}
-					className="absolute w-[200px] h-[200px] md:w-[400px] md:h-[400px] rounded-full -z-10 border-l border-r border-[rgb(var(--color-moonlight-gold))]/30"
+					className="absolute w-[180px] h-[180px] md:w-[360px] md:h-[360px] rounded-full -z-10 border-l-2 border-t-2 border-[rgb(var(--color-moonlight-gold))]/25"
 				/>
 
 				<div className="relative z-10 text-center px-6 max-w-4xl mx-auto space-y-12">
