@@ -1,13 +1,13 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Calendar, ChevronRight, LogOut, Moon, Stars, Sun, User } from "lucide-react";
+import { ArrowRight, LogOut, Moon, Plus, Search, Sparkles, Sun, User, X } from "lucide-react";
 import Link from "next/link";
 import { signOut, useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
-import { DailyHoroscope } from "@/components/DailyHoroscope";
+import { CosmicBackground } from "@/components/CosmicBackground";
+
 import { MoonMonitor } from "@/components/MoonMonitor";
-import { StarField } from "@/components/StarField";
 
 interface ChartSummary {
 	_id: string;
@@ -24,6 +24,7 @@ export default function DashboardPage() {
 	const [isLoading, setIsLoading] = useState(true);
 	const [compareMode, setCompareMode] = useState(false);
 	const [selectedCharts, setSelectedCharts] = useState<string[]>([]);
+	const [searchQuery, setSearchQuery] = useState("");
 
 	useEffect(() => {
 		async function fetchCharts() {
@@ -50,215 +51,312 @@ export default function DashboardPage() {
 		});
 	};
 
+	const filteredCharts = charts.filter((chart) =>
+		chart.name.toLowerCase().includes(searchQuery.toLowerCase()),
+	);
+
 	return (
-		<>
-			<StarField />
-			<main className="min-h-screen py-20 px-4">
-				<div className="max-w-6xl mx-auto space-y-12">
-					<div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-8 border-b border-white/10">
-						<div className="space-y-2">
-							<h1 className="text-5xl font-bold text-gradient">Cosmic Gallery</h1>
-							<p className="text-white/60 text-lg">
-								{session?.user?.name ? `${session.user.name}'s collection` : "Your collection"} of
-								celestial blueprints
-							</p>
-						</div>
-						<div className="flex flex-wrap items-center gap-4">
-							<button
-								type="button"
-								onClick={() => signOut({ callbackUrl: "/auth/signin" })}
-								className="px-4 py-2 text-xs font-bold uppercase tracking-widest text-white/40 hover:text-white transition-colors flex items-center gap-2"
-							>
-								<LogOut className="w-4 h-4" /> Sign Out
-							</button>
-							<button
-								type="button"
-								onClick={() => {
-									setCompareMode(!compareMode);
-									setSelectedCharts([]);
-								}}
-								className={`px-6 py-4 rounded-2xl font-medium transition-all border ${
-									compareMode
-										? "bg-[rgb(var(--color-lavender))]/20 border-[rgb(var(--color-lavender))] text-white"
-										: "bg-white/5 border-white/10 text-white/60 hover:bg-white/10"
-								}`}
-							>
-								{compareMode ? "Cancel Compare" : "Compare Charts"}
-							</button>
-							<Link href="/onboarding">
-								<button
-									type="button"
-									className="px-8 py-4 bg-white/5 hover:bg-white/10 border border-white/10 rounded-2xl text-white font-medium transition-all flex items-center gap-2 group"
-								>
-									Create New
-									<ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-								</button>
-							</Link>
-						</div>
+		<div className="min-h-screen bg-[#050810] text-[rgb(var(--color-cream-white))] relative overflow-x-hidden selection:bg-[rgb(var(--color-moonlight-gold))]/30">
+			<CosmicBackground />
+
+			<main className="relative z-10 max-w-7xl mx-auto px-6 py-20 lg:py-24 space-y-12">
+				{/* Top Bar: Title & User Actions */}
+				<header className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+					<div className="space-y-2">
+						<motion.h1
+							initial={{ opacity: 0, y: 10 }}
+							animate={{ opacity: 1, y: 0 }}
+							className="font-[family-name:var(--font-cormorant)] text-4xl md:text-5xl lg:text-6xl text-[rgb(var(--color-cream-white))]"
+						>
+							Celestial Archives
+						</motion.h1>
+						<motion.p
+							initial={{ opacity: 0 }}
+							animate={{ opacity: 1 }}
+							transition={{ delay: 0.1 }}
+							className="font-[family-name:var(--font-inter)] text-sm text-white/50 tracking-wide"
+						>
+							Exploring the cosmos of {session?.user?.name?.split(" ")[0] || "voyager"}.
+						</motion.p>
 					</div>
 
-					{/* Global Celestial State */}
-					<MoonMonitor />
-
-					{/* Synastry Banner */}
-					{compareMode && (
-						<motion.div
-							initial={{ opacity: 0, scale: 0.95 }}
-							animate={{ opacity: 1, scale: 1 }}
-							className="glass rounded-3xl p-6 flex flex-col md:flex-row items-center justify-between gap-6 border border-[rgb(var(--color-lavender))]/30 bg-[rgb(var(--color-lavender))]/5"
+					<div className="flex items-center gap-4">
+						<button
+							type="button"
+							onClick={() => setCompareMode(!compareMode)}
+							className={`px-5 py-2.5 rounded-full text-xs font-bold uppercase tracking-widest transition-all border ${
+								compareMode
+									? "bg-[rgb(var(--color-moonlight-gold))] text-[#050810] border-transparent"
+									: "bg-white/5 text-white/60 border-white/10 hover:bg-white/10"
+							}`}
 						>
-							<div className="flex items-center gap-4">
-								<div className="p-3 bg-[rgb(var(--color-lavender))]/20 rounded-full">
-									<Stars className="w-6 h-6 text-[rgb(var(--color-lavender))]" />
-								</div>
-								<div>
-									<h3 className="text-xl font-bold text-white">Compare Two Souls</h3>
-									<p className="text-white/40">Select two charts to analyze their compatibility</p>
-								</div>
+							{compareMode ? "Done" : "Compare"}
+						</button>
+						<button
+							type="button"
+							onClick={() => signOut({ callbackUrl: "/auth/signin" })}
+							className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white/40 hover:text-white hover:bg-white/10 transition-colors"
+							aria-label="Sign Out"
+						>
+							<LogOut className="w-4 h-4" />
+						</button>
+					</div>
+				</header>
+
+				{/* Planetary Status Bar */}
+				{!compareMode && (
+					<motion.section
+						initial={{ opacity: 0, y: 10 }}
+						animate={{ opacity: 1, y: 0 }}
+						transition={{ delay: 0.2 }}
+					>
+						<MoonMonitor />
+					</motion.section>
+				)}
+
+				{/* Compare Mode Visual Indicator */}
+				<style jsx>{`
+					.compare-bar-fixed {
+						position: fixed;
+						bottom: 2rem;
+						left: 50%;
+						transform: translateX(-50%);
+						width: 90%;
+						max-width: 600px;
+						z-index: 50;
+					}
+				`}</style>
+				{compareMode && (
+					<motion.div
+						initial={{ opacity: 0, y: 50 }}
+						animate={{ opacity: 1, y: 0 }}
+						className="compare-bar-fixed backdrop-blur-xl bg-[#0F1219]/90 border border-[rgb(var(--color-moonlight-gold))]/30 rounded-2xl p-4 shadow-[0_10px_40px_rgba(0,0,0,0.5)] flex items-center justify-between gap-4"
+					>
+						<div className="flex items-center gap-3">
+							<div className="w-10 h-10 rounded-full bg-[rgb(var(--color-moonlight-gold))]/10 flex items-center justify-center">
+								<Sparkles className="w-5 h-5 text-[rgb(var(--color-moonlight-gold))]" />
 							</div>
-							<div className="flex items-center gap-4">
-								<span className="text-sm font-medium text-white/60">
-									{selectedCharts.length} / 2 selected
+							<div className="flex flex-col">
+								<span className="text-xs font-bold uppercase tracking-widest text-[rgb(var(--color-moonlight-gold))]">
+									Synastry
 								</span>
-								<Link
-									href={`/synastry/${selectedCharts[0]}/${selectedCharts[1]}`}
-									className={`${
-										selectedCharts.length === 2 ? "opacity-100" : "opacity-30 pointer-events-none"
-									}`}
-								>
+								<span className="text-[10px] text-white/50">
+									{selectedCharts.length} of 2 Selected
+								</span>
+							</div>
+						</div>
+
+						<Link
+							href={
+								selectedCharts.length === 2
+									? `/synastry/${selectedCharts[0]}/${selectedCharts[1]}`
+									: "#"
+							}
+							className={selectedCharts.length !== 2 ? "pointer-events-none opacity-50" : ""}
+						>
+							<button
+								type="button"
+								disabled={selectedCharts.length !== 2}
+								className="px-6 py-3 bg-[rgb(var(--color-moonlight-gold))] text-[#050810] rounded-xl text-xs font-bold uppercase tracking-widest hover:brightness-110 active:scale-95 transition-all flex items-center gap-2"
+							>
+								Analyze <ArrowRight className="w-3 h-3" />
+							</button>
+						</Link>
+					</motion.div>
+				)}
+
+				<div className="h-px bg-gradient-to-r from-transparent via-white/10 to-transparent w-full" />
+
+				{/* Toolbar: Search */}
+				<div className="flex items-center justify-between gap-4">
+					<div className="relative group max-w-sm w-full">
+						<Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/30 group-focus-within:text-[rgb(var(--color-moonlight-gold))] transition-colors" />
+						<input
+							type="text"
+							placeholder="Search charts..."
+							value={searchQuery}
+							onChange={(e) => setSearchQuery(e.target.value)}
+							className="w-full bg-white/[0.03] border border-white/10 rounded-xl py-2.5 pl-10 pr-4 text-sm text-white focus:outline-none focus:border-[rgb(var(--color-moonlight-gold))]/50 transition-colors placeholder:text-white/20"
+						/>
+					</div>
+					{/* Filter buttons could go here */}
+				</div>
+
+				{/* Main Grid */}
+				{isLoading ? (
+					<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+						{[...Array(4)].map((_, i) => (
+							<div
+								key={i}
+								className="aspect-[4/5] rounded-[2rem] bg-white/[0.02] border border-white/5 animate-pulse"
+							/>
+						))}
+					</div>
+				) : (
+					<motion.div
+						layout
+						className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
+					>
+						{/* Empty State for Compare Mode or Search */}
+						{filteredCharts.length === 0 && (compareMode || searchQuery) && (
+							<div className="col-span-full py-20 flex flex-col items-center justify-center text-center space-y-4">
+								<div className="w-16 h-16 rounded-full bg-white/5 flex items-center justify-center">
+									<Search className="w-6 h-6 text-white/30" />
+								</div>
+								<div className="space-y-1">
+									<h3 className="font-[family-name:var(--font-cormorant)] text-2xl text-[rgb(var(--color-cream-white))]">
+										{searchQuery ? "No charts found" : "No charts to compare"}
+									</h3>
+									<p className="text-sm text-white/40">
+										{searchQuery
+											? `No results for "${searchQuery}"`
+											: "Create at least two charts to analyze compatibility."}
+									</p>
+								</div>
+								{!searchQuery && (
 									<button
 										type="button"
-										className="px-8 py-4 bg-[rgb(var(--color-lavender))] rounded-2xl text-[rgb(var(--color-deep-space))] font-bold hover:scale-105 transition-all shadow-[0_0_30px_rgba(184,164,232,0.3)]"
+										onClick={() => setCompareMode(false)}
+										className="text-xs font-bold uppercase tracking-widest text-[rgb(var(--color-moonlight-gold))] hover:text-white transition-colors mt-4"
 									>
-										Analyze Harmony
+										Return to Gallery
 									</button>
-								</Link>
+								)}
 							</div>
-						</motion.div>
-					)}
+						)}
 
-					{/* Daily Energy Section */}
-					{!isLoading && charts.length > 0 && !compareMode && (
-						<DailyHoroscope sign={charts[0]?.sunSign || ""} />
-					)}
-
-					{isLoading ? (
-						<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-							{[1, 2, 3].map((i) => (
-								<div
-									key={i}
-									className="h-64 rounded-3xl bg-white/5 animate-pulse border border-white/5"
-								/>
-							))}
-						</div>
-					) : charts.length === 0 ? (
-						<div className="text-center py-20 glass rounded-3xl border border-white/5 space-y-6">
-							<div className="flex justify-center">
-								<Stars className="w-16 h-16 text-white/20" />
-							</div>
-							<div className="space-y-2">
-								<h2 className="text-2xl font-bold text-white">No blueprints found</h2>
-								<p className="text-white/40">The stars are waiting to be mapped...</p>
-							</div>
-							<Link
-								href="/onboarding"
-								className="inline-block text-[rgb(var(--color-moonlight-gold))] hover:underline"
-							>
-								Begin your first journey
-							</Link>
-						</div>
-					) : (
-						<motion.div
-							key={compareMode ? "compare" : "gallery"}
-							initial="hidden"
-							animate="show"
-							variants={{
-								hidden: { opacity: 0 },
-								show: {
-									opacity: 1,
-									transition: { staggerChildren: 0.1 },
-								},
-							}}
-							className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
-						>
-							{charts.map((chart) => (
-								<button
-									type="button"
-									key={chart._id}
-									onClick={() => compareMode && toggleChartSelection(chart._id)}
-									className={`w-full text-left transition-all ${
-										compareMode && selectedCharts.includes(chart._id)
-											? "scale-[1.05] ring-2 ring-[rgb(var(--color-lavender))] rounded-3xl"
-											: ""
-									} ${!compareMode ? "cursor-default" : "cursor-pointer"}`}
+						{/* Card 1: Create New (Always first) */}
+						{!compareMode && !searchQuery && (
+							<Link href="/onboarding" className="group">
+								<motion.div
+									whileHover={{ y: -4 }}
+									className="h-full min-h-[320px] rounded-[2rem] border-2 border-dashed border-white/10 bg-white/[0.02] hover:bg-white/[0.04] hover:border-[rgb(var(--color-moonlight-gold))]/40 transition-all flex flex-col items-center justify-center gap-4 cursor-pointer p-6 text-center"
 								>
-									<ChartCard chart={chart} isLink={!compareMode} />
-								</button>
-							))}
-						</motion.div>
-					)}
-				</div>
+									<div className="w-14 h-14 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-[rgb(var(--color-moonlight-gold))] group-hover:text-[#050810] transition-colors duration-500">
+										<Plus className="w-6 h-6" />
+									</div>
+									<div className="space-y-1">
+										<h3 className="font-[family-name:var(--font-cormorant)] text-2xl text-[rgb(var(--color-cream-white))]">
+											New Chart
+										</h3>
+										<p className="text-xs text-white/40 font-[family-name:var(--font-inter)]">
+											Map a new soul
+										</p>
+									</div>
+								</motion.div>
+							</Link>
+						)}
+
+						{/* Chart Cards */}
+						{filteredCharts.map((chart) => (
+							<ChartCard
+								key={chart._id}
+								chart={chart}
+								compareMode={compareMode}
+								isSelected={selectedCharts.includes(chart._id)}
+								onSelect={() => toggleChartSelection(chart._id)}
+							/>
+						))}
+					</motion.div>
+				)}
 			</main>
-		</>
+		</div>
 	);
 }
 
-function ChartCard({ chart, isLink = true }: { chart: ChartSummary; isLink?: boolean }) {
+function ChartCard({
+	chart,
+	compareMode,
+	isSelected,
+	onSelect,
+}: {
+	chart: ChartSummary;
+	compareMode: boolean;
+	isSelected: boolean;
+	onSelect: () => void;
+}) {
 	const content = (
-		<motion.div
-			variants={{
-				hidden: { opacity: 0, y: 20 },
-				show: { opacity: 1, y: 0 },
-			}}
-			className="group glass rounded-3xl p-6 space-y-6 hover:bg-white/10 transition-all duration-500 hover:scale-[1.02] border border-white/5 hover:border-white/20"
-		>
-			<div className="flex justify-between items-start">
-				<div className="p-3 bg-white/5 rounded-2xl group-hover:bg-[rgb(var(--color-lavender))]/20 transition-colors">
-					<User className="w-6 h-6 text-[rgb(var(--color-lavender))]" />
+		<div className="relative h-full min-h-[320px] bg-[#1A1E29]/40 backdrop-blur-md rounded-[2rem] p-8 border border-white/5 flex flex-col justify-between group overflow-hidden transition-all duration-500 hover:border-[rgb(var(--color-moonlight-gold))]/30 hover:bg-[#1A1E29]/60">
+			{/* Hover Glow Effect */}
+			<div className="absolute top-0 right-0 w-32 h-32 bg-[rgb(var(--color-moonlight-gold))]/5 blur-[60px] opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
+
+			{/* Header */}
+			<div className="flex justify-between items-start relative z-10">
+				<div className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-[rgb(var(--color-cream-white))]/60">
+					<User className="w-4 h-4" />
 				</div>
-				<div className="flex items-center gap-1.5 text-xs text-white/40 bg-white/5 px-3 py-1 rounded-full">
-					<Calendar className="w-3 h-3" />
-					{new Date(chart.createdAt).toLocaleDateString()}
-				</div>
+				<span className="text-[10px] font-mono text-white/30 uppercase tracking-widest">NATAL</span>
 			</div>
 
-			<div className="space-y-1">
-				<h3 className="text-2xl font-bold text-white group-hover:text-gradient transition-all">
+			{/* Center Info */}
+			<div className="space-y-4 my-6 relative z-10">
+				<h3 className="font-[family-name:var(--font-cormorant)] text-3xl md:text-4xl text-[rgb(var(--color-cream-white))] leading-none group-hover:text-[rgb(var(--color-moonlight-gold))] transition-colors">
 					{chart.name}
 				</h3>
+				<div className="h-px w-10 bg-[rgb(var(--color-moonlight-gold))]/30 group-hover:w-20 transition-all duration-500" />
 			</div>
 
-			<div className="grid grid-cols-3 gap-2">
-				<SignItem
-					icon={<Sun className="w-3 h-3 text-orange-400" />}
-					sign={chart.sunSign}
+			{/* Footer: Signs */}
+			<div className="grid grid-cols-3 gap-2 relative z-10">
+				<SignPill
+					icon={<Sun className="w-3 h-3 text-amber-200" />}
 					label="Sun"
+					sign={chart.sunSign}
 				/>
-				<SignItem
-					icon={<Moon className="w-3 h-3 text-blue-300" />}
-					sign={chart.moonSign}
+				<SignPill
+					icon={<Moon className="w-3 h-3 text-blue-200" />}
 					label="Moon"
+					sign={chart.moonSign}
 				/>
-				<SignItem
-					icon={<Stars className="w-3 h-3 text-purple-400" />}
+				<SignPill
+					icon={<ArrowRight className="w-3 h-3 text-purple-200" />}
+					label="Asc"
 					sign={chart.risingSign}
-					label="Rising"
 				/>
 			</div>
-		</motion.div>
+		</div>
 	);
 
-	if (!isLink) return content;
+	if (compareMode) {
+		return (
+			<motion.div
+				layout
+				onClick={onSelect}
+				className={`relative rounded-[2rem] overflow-hidden cursor-pointer transition-all duration-300 ${
+					isSelected
+						? "ring-2 ring-[rgb(var(--color-moonlight-gold))] scale-[0.98] bg-white/[0.08]"
+						: "bg-white/[0.03] hover:bg-white/[0.05]"
+				}`}
+			>
+				{isSelected && (
+					<div className="absolute top-4 right-4 z-20 w-6 h-6 bg-[rgb(var(--color-moonlight-gold))] rounded-full flex items-center justify-center">
+						<Sparkles className="w-3 h-3 text-[#050810]" />
+					</div>
+				)}
+				{content}
+			</motion.div>
+		);
+	}
 
-	return <Link href={`/chart/${chart._id}`}>{content}</Link>;
+	return (
+		<Link href={`/chart/${chart._id}`} className="block group h-full">
+			<motion.div layout whileHover={{ y: -6 }} className="h-full">
+				{content}
+			</motion.div>
+		</Link>
+	);
 }
 
-function SignItem({ icon, sign, label }: { icon: React.ReactNode; sign: string; label: string }) {
+function SignPill({ icon, label, sign }: { icon: React.ReactNode; label: string; sign: string }) {
 	return (
-		<div className="flex flex-col items-center p-2 rounded-xl bg-black/20 border border-white/5 space-y-1">
-			<span className="text-[10px] uppercase tracking-tighter text-white/40">{label}</span>
-			{icon}
-			<span className="text-xs font-medium text-white/80 truncate w-full text-center">{sign}</span>
+		<div className="flex flex-col items-center gap-1.5 p-2 rounded-xl bg-black/20 border border-white/5 transition-colors group-hover:bg-black/30">
+			<div className="flex items-center gap-1 opacity-50">
+				{icon}
+				<span className="text-[8px] uppercase tracking-wider">{label}</span>
+			</div>
+			<span className="text-xs font-medium text-[rgb(var(--color-cream-white))] truncate w-full text-center group-hover:text-white transition-colors">
+				{sign}
+			</span>
 		</div>
 	);
 }

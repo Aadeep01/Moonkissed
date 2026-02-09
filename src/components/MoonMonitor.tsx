@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Moon, Sparkles } from "lucide-react";
+import { Calendar, Moon, Sparkles } from "lucide-react";
 import { useEffect, useState } from "react";
 
 interface MoonData {
@@ -36,96 +36,95 @@ export function MoonMonitor() {
 	}, []);
 
 	if (isLoading) {
-		return <div className="h-64 glass rounded-[2rem] animate-pulse bg-white/5" />;
+		return (
+			<div className="h-40 rounded-[2rem] animate-pulse bg-white/[0.02] border border-white/5" />
+		);
 	}
 
 	if (!data) return null;
 
 	return (
 		<motion.div
-			initial={{ opacity: 0, y: 20 }}
+			initial={{ opacity: 0, y: 10 }}
 			animate={{ opacity: 1, y: 0 }}
-			className="glass rounded-[2rem] p-8 md:p-12 border border-white/10 relative overflow-hidden group"
+			className="relative overflow-hidden rounded-[2rem] bg-white/[0.02] border border-white/5 p-6 md:p-8 flex flex-col md:flex-row items-center justify-between gap-8 group hover:border-[rgb(var(--color-moonlight-gold))]/20 transition-all duration-500"
 		>
-			{/* Celestial Glow Background */}
-			<div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full bg-gradient-to-b from-[rgb(var(--color-lavender))]/5 to-transparent pointer-events-none" />
+			{/* Background Glow */}
+			<div className="absolute top-0 right-0 w-64 h-64 bg-[rgb(var(--color-moonlight-gold))]/5 blur-[80px] rounded-full pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
 
-			<div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center relative">
-				{/* Visual Moon Section */}
-				<div className="flex flex-col items-center justify-center space-y-8">
-					<div className="relative">
-						{/* Background Glow */}
-						<div className="absolute inset-0 blur-3xl bg-[rgb(var(--color-lavender))] opacity-20 group-hover:opacity-40 transition-opacity duration-1000" />
-
-						{/* Real-feeling Moon Visualization */}
-						<div className="relative w-48 h-48 md:w-64 md:h-64 rounded-full bg-[#1A1A2E] border border-white/5 shadow-inner overflow-hidden">
-							{/* The Illumination Layer */}
-							<div
-								className="absolute inset-0 bg-[#E0E0FF] shadow-[0_0_40px_rgba(224,224,255,0.4)]"
-								style={{
-									clipPath:
-										data.phaseDeg <= 180
-											? `inset(0 ${100 - data.illumination * 100}% 0 0)`
-											: `inset(0 0 0 ${100 - data.illumination * 100}%)`,
-									opacity: 0.9,
-								}}
-							/>
-							{/* Soft side of the moon edge shadow */}
-							<div className="absolute inset-0 shadow-[inset_-20px_0_40px_rgba(0,0,0,0.8),inset_20px_0_40px_rgba(0,0,0,0.8)]" />
-						</div>
-					</div>
-
-					<div className="text-center space-y-2">
-						<h3 className="text-3xl font-bold text-white tracking-wide">{data.phaseName}</h3>
-						<p className="text-[rgb(var(--color-lavender))] font-semibold uppercase tracking-[0.3em] text-xs">
-							{(data.illumination * 100).toFixed(1)}% Illuminated
-						</p>
+			<div className="flex items-center gap-6 relative z-10 w-full md:w-auto">
+				{/* Moon Visual */}
+				<div className="relative w-20 h-20 flex-shrink-0">
+					<div className="absolute inset-0 bg-[rgb(var(--color-moonlight-gold))] blur-xl opacity-20" />
+					<div className="relative w-full h-full rounded-full bg-[#1A1A2E] border border-white/10 overflow-hidden shadow-2xl">
+						<div
+							className="absolute inset-0 bg-[#E0E0FF] shadow-[0_0_20px_rgba(224,224,255,0.2)]"
+							style={{
+								clipPath:
+									data.phaseDeg <= 180
+										? `inset(0 ${100 - data.illumination * 100}% 0 0)`
+										: `inset(0 0 0 ${100 - data.illumination * 100}%)`,
+								opacity: 0.9,
+							}}
+						/>
+						<div className="absolute inset-0 shadow-[inset_-4px_-4px_10px_rgba(0,0,0,0.5)]" />
 					</div>
 				</div>
 
-				{/* Interpretation Section */}
-				<div className="space-y-8">
-					<div className="space-y-4">
-						<div className="flex items-center gap-3">
-							<div className="p-2 bg-white/5 rounded-lg border border-white/10">
-								<Sparkles className="w-5 h-5 text-[rgb(var(--color-moonlight-gold))]" />
-							</div>
-							<h4 className="text-sm font-bold uppercase tracking-widest text-[rgb(var(--color-moonlight-gold))]">
-								Lunar Wisdom
-							</h4>
-						</div>
-						<p className="text-2xl font-serif italic text-white/90 leading-relaxed">
-							"{data.interpretation}"
-						</p>
+				{/* Text Info */}
+				<div className="space-y-1">
+					<div className="flex items-center gap-2">
+						<Sparkles className="w-3 h-3 text-[rgb(var(--color-moonlight-gold))]" />
+						<span className="text-[10px] uppercase tracking-widest text-[rgb(var(--color-moonlight-gold))]">
+							Current Phase
+						</span>
 					</div>
+					<h3 className="font-[family-name:var(--font-cormorant)] text-3xl text-[rgb(var(--color-cream-white))] leading-none">
+						{data.phaseName}
+					</h3>
+					<p className="text-xs text-white/40 font-[family-name:var(--font-inter)]">
+						{(data.illumination * 100).toFixed(0)}% Illumination
+					</p>
+				</div>
+			</div>
 
-					{/* Upcoming Events */}
-					<div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-						<LunarEvent
-							label="Next Full Moon"
-							date={new Date(data.nextFullMoon).toLocaleDateString()}
-							icon={<Moon className="w-4 h-4 text-white" />}
-						/>
-						<LunarEvent
-							label="Next New Moon"
-							date={new Date(data.nextNewMoon).toLocaleDateString()}
-							icon={<Moon className="w-4 h-4 text-white/30" />}
-						/>
+			{/* Divider */}
+			<div className="hidden md:block w-px h-16 bg-white/5" />
+
+			{/* Wisdom */}
+			<div className="flex-1 text-center md:text-left space-y-2 max-w-xl relative z-10">
+				<p className="font-[family-name:var(--font-cormorant)] text-xl md:text-2xl italic text-[rgb(var(--color-cream-white))]/90 leading-relaxed">
+					"{data.interpretation}"
+				</p>
+			</div>
+
+			{/* Next Cycle */}
+			<div className="hidden lg:flex items-center gap-8 relative z-10 pl-8 border-l border-white/5">
+				<div className="flex flex-col items-center gap-1">
+					<span className="text-[9px] uppercase tracking-widest text-white/30">Next Full</span>
+					<div className="flex items-center gap-2 text-white/80">
+						<Moon className="w-3 h-3 fill-current" />
+						<span className="text-xs font-medium font-[family-name:var(--font-inter)]">
+							{new Date(data.nextFullMoon).toLocaleDateString(undefined, {
+								month: "short",
+								day: "numeric",
+							})}
+						</span>
+					</div>
+				</div>
+				<div className="flex flex-col items-center gap-1">
+					<span className="text-[9px] uppercase tracking-widest text-white/30">Next New</span>
+					<div className="flex items-center gap-2 text-white/80">
+						<div className="w-3 h-3 rounded-full border border-white/30" />
+						<span className="text-xs font-medium font-[family-name:var(--font-inter)]">
+							{new Date(data.nextNewMoon).toLocaleDateString(undefined, {
+								month: "short",
+								day: "numeric",
+							})}
+						</span>
 					</div>
 				</div>
 			</div>
 		</motion.div>
-	);
-}
-
-function LunarEvent({ label, date, icon }: { label: string; date: string; icon: React.ReactNode }) {
-	return (
-		<div className="glass bg-white/5 rounded-2xl p-4 flex items-center gap-4 border border-white/5 group-hover:border-white/10 transition-colors">
-			<div className="p-2 bg-white/5 rounded-xl">{icon}</div>
-			<div className="space-y-0.5">
-				<p className="text-[10px] uppercase font-bold tracking-tighter text-white/40">{label}</p>
-				<p className="text-sm font-medium text-white/80">{date}</p>
-			</div>
-		</div>
 	);
 }
