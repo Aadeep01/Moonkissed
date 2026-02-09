@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { Calendar, ChevronRight, Moon, Stars, Sun, User } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { DailyHoroscope } from "@/components/DailyHoroscope";
 import { StarField } from "@/components/StarField";
 
 interface ChartSummary {
@@ -56,6 +57,9 @@ export default function DashboardPage() {
 							</button>
 						</Link>
 					</div>
+
+					{/* Daily Energy Section */}
+					{!isLoading && charts.length > 0 && <DailyHoroscope sign={charts[0]?.sunSign || ""} />}
 
 					{isLoading ? (
 						<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
