@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { ArrowRight, LogOut, Moon, Plus, Search, Sparkles, Sun, User, X } from "lucide-react";
+import { ArrowRight, LogOut, Moon, Plus, Search, Sparkles, Sun, User } from "lucide-react";
 import Link from "next/link";
 import { signOut, useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
@@ -187,7 +187,8 @@ export default function DashboardPage() {
 					<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
 						{[...Array(4)].map((_, i) => (
 							<div
-								key={i}
+								// biome-ignore lint/suspicious/noArrayIndexKey: skeleton loader constant list
+								key={`skeleton-${i}`}
 								className="aspect-[4/5] rounded-[2rem] bg-white/[0.02] border border-white/5 animate-pulse"
 							/>
 						))}
