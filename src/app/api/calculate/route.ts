@@ -1,9 +1,9 @@
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { calculateSigns } from "@/lib/astrology";
+import { authOptions } from "@/lib/auth";
 import dbConnect from "@/lib/mongoose";
 import BirthChart from "@/models/BirthChart";
-import { authOptions } from "@/lib/auth";
 
 export async function POST(request: Request) {
 	try {

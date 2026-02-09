@@ -30,15 +30,15 @@ export function StarField() {
 
 		// Create stars
 		const stars: Star[] = [];
-		const starCount = 200;
+		const starCount = 80;
 
 		for (let i = 0; i < starCount; i++) {
 			stars.push({
 				x: Math.random() * canvas.width,
 				y: Math.random() * canvas.height,
-				size: Math.random() * 2,
-				speed: Math.random() * 0.5 + 0.1,
-				opacity: Math.random() * 0.5 + 0.5,
+				size: Math.random() * 1.5,
+				speed: Math.random() * 0.05 + 0.02,
+				opacity: Math.random() * 0.5 + 0.3,
 			});
 		}
 

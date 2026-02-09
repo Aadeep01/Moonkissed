@@ -1,140 +1,110 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Heart, Moon, Sparkles, Stars } from "lucide-react";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
-import { StarField } from "@/components/StarField";
+import { CosmicBackground } from "@/components/CosmicBackground";
 
 export default function HomePage() {
 	const { data: session } = useSession();
 
 	return (
 		<>
-			<StarField />
-			<main className="min-h-screen relative overflow-hidden">
-				{/* Hero Section */}
-				<section className="min-h-screen flex items-center justify-center px-4 py-20">
-					<div className="max-w-5xl mx-auto text-center space-y-8">
-						{/* Animated Moon Icon */}
-						<motion.div
-							initial={{ opacity: 0, scale: 0.5 }}
-							animate={{ opacity: 1, scale: 1 }}
-							transition={{ duration: 0.8 }}
-							className="flex justify-center mb-8"
-						>
-							<div className="relative">
-								<Moon className="w-20 h-20 text-[rgb(var(--color-moonlight-gold))] animate-pulse-slow" />
-								<div className="absolute inset-0 blur-xl bg-[rgb(var(--color-moonlight-gold))] opacity-30 animate-pulse-slow" />
-							</div>
-						</motion.div>
+			<CosmicBackground />
+			<main className="min-h-screen relative flex flex-col items-center justify-center overflow-hidden bg-[rgb(var(--color-deep-space))]/20">
+				{/* Outer Circle - Elegant Varying Orbit */}
+				<motion.div
+					initial={{ opacity: 0, scale: 0.8, rotate: 0 }}
+					animate={{
+						opacity: 1,
+						scale: 1,
+						rotate: 360,
+					}}
+					transition={{
+						opacity: { duration: 1.5, ease: "easeOut" },
+						scale: { duration: 1.5, ease: "easeOut" },
+						rotate: { duration: 90, repeat: Infinity, ease: "linear" }, // Smooth constant base
+					}}
+					className="absolute w-[300px] h-[300px] md:w-[600px] md:h-[600px] border border-[rgb(var(--color-moonlight-gold))]/10 rounded-full -z-10"
+				/>
 
-						{/* Main Heading */}
-						<motion.h1
-							initial={{ opacity: 0, y: 20 }}
-							animate={{ opacity: 1, y: 0 }}
-							transition={{ duration: 0.8, delay: 0.2 }}
-							className="text-7xl md:text-8xl lg:text-9xl font-bold mb-6"
-						>
-							<span className="text-gradient">Moonkissed</span>
-						</motion.h1>
+				{/* Inner Accents - Dynamic Gyroscope */}
+				<motion.div
+					initial={{ opacity: 0, scale: 0.9, rotate: 0 }}
+					animate={{
+						opacity: 1,
+						scale: 1,
+						rotate: -360,
+					}}
+					transition={{
+						opacity: { duration: 1.5, ease: "easeOut", delay: 0.2 },
+						scale: { duration: 1.5, ease: "easeOut", delay: 0.2 },
+						rotate: { duration: 120, repeat: Infinity, ease: "linear" },
+					}}
+					className="absolute w-[280px] h-[280px] md:w-[580px] md:h-[580px] rounded-full -z-10 border-t border-b border-[rgb(var(--color-moonlight-gold))]/20"
+				/>
 
-						{/* Tagline */}
-						<motion.p
-							initial={{ opacity: 0, y: 20 }}
-							animate={{ opacity: 1, y: 0 }}
-							transition={{ duration: 0.8, delay: 0.4 }}
-							className="text-xl md:text-2xl text-[rgb(var(--color-cream-white))]/80 max-w-2xl mx-auto"
-						>
-							Your cosmic blueprint, beautifully revealed
-						</motion.p>
+				<motion.div
+					initial={{ opacity: 0, scale: 0.9, rotate: 45 }}
+					animate={{
+						opacity: 1,
+						scale: 1,
+						rotate: -315,
+					}}
+					transition={{
+						opacity: { duration: 1.5, ease: "easeOut", delay: 0.4 },
+						scale: { duration: 1.5, ease: "easeOut", delay: 0.4 },
+						rotate: { duration: 60, repeat: Infinity, ease: "linear" },
+					}}
+					className="absolute w-[200px] h-[200px] md:w-[400px] md:h-[400px] rounded-full -z-10 border-l border-r border-[rgb(var(--color-moonlight-gold))]/30"
+				/>
 
-						{/* CTA Button */}
-						<motion.div
-							initial={{ opacity: 0, y: 20 }}
-							animate={{ opacity: 1, y: 0 }}
-							transition={{ duration: 0.8, delay: 0.6 }}
-							className="pt-8 flex justify-center"
-						>
-							<Link href="/dashboard">
-								<button
-									type="button"
-									className="group relative px-12 py-5 text-lg font-semibold rounded-full overflow-hidden transition-all duration-300 hover:scale-105 min-w-[280px]"
-								>
-									{/* Gradient Background */}
-									<div className="absolute inset-0 bg-gradient-to-r from-[rgb(var(--color-lavender))] to-[rgb(var(--color-celestial-pink))] transition-opacity group-hover:opacity-90" />
+				<div className="relative z-10 text-center px-6 max-w-4xl mx-auto space-y-12">
+					{/* Main Title - Elegant & Serif */}
+					<motion.h1
+						initial={{ opacity: 0, y: 30 }}
+						animate={{ opacity: 1, y: 0 }}
+						transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
+						className="font-[family-name:var(--font-cormorant)] text-6xl md:text-8xl lg:text-9xl font-light tracking-wide text-[rgb(var(--color-cream-white))]"
+					>
+						Moonkissed
+					</motion.h1>
 
-									{/* Shimmer Effect */}
-									<div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-shimmer bg-[length:200%_100%]" />
+					{/* Primary Action - Minimalist Button */}
+					<motion.div
+						initial={{ opacity: 0, y: 20 }}
+						animate={{ opacity: 1, y: 0 }}
+						transition={{ duration: 1, delay: 0.8 }}
+					>
+						<Link href={session ? "/dashboard" : "/auth/signin"}>
+							<button
+								type="button"
+								className="group relative px-10 py-4 overflow-hidden rounded-full transition-all duration-500 hover:bg-[rgb(var(--color-moonlight-gold))]/10"
+							>
+								{/* Thin Border */}
+								<span className="absolute inset-0 border border-[rgb(var(--color-moonlight-gold))]/30 rounded-full transition-all duration-500 group-hover:border-[rgb(var(--color-moonlight-gold))]/60" />
 
-									{/* Button Text */}
-									<span className="relative flex items-center justify-center gap-2 text-[rgb(var(--color-deep-space))]">
-										<Sparkles className="w-5 h-5 transition-transform group-hover:rotate-12" />
-										{session ? "Enter Your Gallery" : "Discover Your Chart"}
-									</span>
-								</button>
-							</Link>
-						</motion.div>
+								{/* Text */}
+								<span className="relative font-[family-name:var(--font-inter)] text-xs md:text-sm font-medium tracking-widest uppercase text-[rgb(var(--color-cream-white))] group-hover:text-[rgb(var(--color-moonlight-gold))] transition-colors duration-300">
+									{session ? "Enter Gallery" : "Begin Journey"}
+								</span>
+							</button>
+						</Link>
+					</motion.div>
+				</div>
 
-						{/* Feature Cards */}
-						<motion.div
-							initial={{ opacity: 0, y: 40 }}
-							animate={{ opacity: 1, y: 0 }}
-							transition={{ duration: 0.8, delay: 0.8 }}
-							className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-20 max-w-4xl mx-auto"
-						>
-							{features.map((feature, index) => (
-								<FeatureCard key={feature.title} feature={feature} index={index} />
-							))}
-						</motion.div>
-					</div>
-				</section>
+				{/* Footer/Scroll Hint */}
+				<motion.div
+					initial={{ opacity: 0 }}
+					animate={{ opacity: 1 }}
+					transition={{ duration: 1, delay: 1.5 }}
+					className="absolute bottom-12 text-center"
+				>
+					<p className="font-[family-name:var(--font-cormorant)] text-[rgb(var(--color-cream-white))]/30 text-sm italic">
+						Precision Astrology &bull; Artificial Intelligence
+					</p>
+				</motion.div>
 			</main>
 		</>
-	);
-}
-
-interface Feature {
-	icon: React.ReactNode;
-	title: string;
-	description: string;
-}
-
-const features: Feature[] = [
-	{
-		icon: <Stars className="w-8 h-8" />,
-		title: "AI-Powered Insights",
-		description: "Deep celestial analysis powered by advanced AI technology",
-	},
-	{
-		icon: <Moon className="w-8 h-8" />,
-		title: "Birth Chart Analysis",
-		description: "Discover your Sun, Moon, and Rising signs with precision",
-	},
-	{
-		icon: <Heart className="w-8 h-8" />,
-		title: "Compatibility",
-		description: "Explore cosmic connections with those who matter most",
-	},
-];
-
-function FeatureCard({ feature, index }: { feature: Feature; index: number }) {
-	return (
-		<motion.div
-			initial={{ opacity: 0, y: 20 }}
-			animate={{ opacity: 1, y: 0 }}
-			transition={{ duration: 0.5, delay: 1 + index * 0.1 }}
-			className="group glass rounded-2xl p-8 hover:bg-white/15 transition-all duration-300 hover:scale-105 hover:shadow-[0_0_30px_rgba(184,164,232,0.3)]"
-		>
-			<div className="text-[rgb(var(--color-lavender))] mb-4 group-hover:scale-110 transition-transform duration-300">
-				{feature.icon}
-			</div>
-			<h3 className="text-xl font-semibold mb-2 text-[rgb(var(--color-cream-white))]">
-				{feature.title}
-			</h3>
-			<p className="text-[rgb(var(--color-cream-white))]/70 text-sm leading-relaxed">
-				{feature.description}
-			</p>
-		</motion.div>
 	);
 }
