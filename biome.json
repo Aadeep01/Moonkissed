@@ -9,6 +9,7 @@
 		"ignoreUnknown": false,
 		"includes": [
 			"**",
+			"!**/*.css",
 			"!**/*.config.js",
 			"!!**/node_modules",
 			"!!**/.next",
@@ -45,6 +46,18 @@
 			"quoteStyle": "double",
 			"semicolons": "always",
 			"trailingCommas": "all"
+		}
+	},
+	"css": {
+		"parser": {
+			"cssModules": false,
+			"allowWrongLineComments": true
+		},
+		"formatter": {
+			"enabled": true,
+			"indentStyle": "tab",
+			"indentWidth": 2,
+			"lineWidth": 100
 		}
 	},
 	"assist": {
