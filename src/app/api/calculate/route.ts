@@ -39,7 +39,7 @@ export async function POST(request: Request) {
 			latitude,
 			longitude,
 			...result,
-			userId: session?.user ? (session.user as any).id : undefined,
+			userId: session?.user ? session.user.id : undefined,
 		});
 
 		return NextResponse.json({ id: chart._id, ...result });

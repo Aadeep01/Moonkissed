@@ -13,7 +13,7 @@ export async function GET() {
 		}
 
 		await dbConnect();
-		const charts = await BirthChart.find({ userId: (session.user as any).id })
+		const charts = await BirthChart.find({ userId: session.user.id })
 			.sort({ createdAt: -1 })
 			.select("name sunSign moonSign risingSign createdAt")
 			.lean();

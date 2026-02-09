@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Moon, Sparkles, Timer } from "lucide-react";
+import { Moon, Sparkles } from "lucide-react";
 import { useEffect, useState } from "react";
 
 interface MoonData {
