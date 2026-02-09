@@ -19,6 +19,8 @@ interface ChartSummary {
 export default function DashboardPage() {
 	const [charts, setCharts] = useState<ChartSummary[]>([]);
 	const [isLoading, setIsLoading] = useState(true);
+	const [compareMode, setCompareMode] = useState(false);
+	const [selectedCharts, setSelectedCharts] = useState<string[]>([]);
 
 	useEffect(() => {
 		async function fetchCharts() {
@@ -37,6 +39,14 @@ export default function DashboardPage() {
 		fetchCharts();
 	}, []);
 
+	const toggleChartSelection = (id: string) => {
+		setSelectedCharts((prev) => {
+			if (prev.includes(id)) return prev.filter((i) => i !== id);
+			if (prev.length < 2) return [...prev, id];
+			return [prev[1] as string, id];
+		});
+	};
+
 	return (
 		<>
 			<StarField />
@@ -47,19 +57,74 @@ export default function DashboardPage() {
 							<h1 className="text-5xl font-bold text-gradient">Cosmic Gallery</h1>
 							<p className="text-white/60 text-lg">Your collection of celestial blueprints</p>
 						</div>
-						<Link href="/onboarding">
+						<div className="flex items-center gap-4">
 							<button
 								type="button"
-								className="px-8 py-4 bg-white/5 hover:bg-white/10 border border-white/10 rounded-2xl text-white font-medium transition-all flex items-center gap-2 group"
+								onClick={() => {
+									setCompareMode(!compareMode);
+									setSelectedCharts([]);
+								}}
+								className={`px-6 py-4 rounded-2xl font-medium transition-all border ${
+									compareMode
+										? "bg-[rgb(var(--color-lavender))]/20 border-[rgb(var(--color-lavender))] text-white"
+										: "bg-white/5 border-white/10 text-white/60 hover:bg-white/10"
+								}`}
 							>
-								Create New Chart
-								<ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+								{compareMode ? "Cancel Compare" : "Compare Charts"}
 							</button>
-						</Link>
+							<Link href="/onboarding">
+								<button
+									type="button"
+									className="px-8 py-4 bg-white/5 hover:bg-white/10 border border-white/10 rounded-2xl text-white font-medium transition-all flex items-center gap-2 group"
+								>
+									Create New
+									<ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+								</button>
+							</Link>
+						</div>
 					</div>
 
+					{/* Synastry Banner */}
+					{compareMode && (
+						<motion.div
+							initial={{ opacity: 0, scale: 0.95 }}
+							animate={{ opacity: 1, scale: 1 }}
+							className="glass rounded-3xl p-6 flex flex-col md:flex-row items-center justify-between gap-6 border border-[rgb(var(--color-lavender))]/30 bg-[rgb(var(--color-lavender))]/5"
+						>
+							<div className="flex items-center gap-4">
+								<div className="p-3 bg-[rgb(var(--color-lavender))]/20 rounded-full">
+									<Stars className="w-6 h-6 text-[rgb(var(--color-lavender))]" />
+								</div>
+								<div>
+									<h3 className="text-xl font-bold text-white">Compare Two Souls</h3>
+									<p className="text-white/40">Select two charts to analyze their compatibility</p>
+								</div>
+							</div>
+							<div className="flex items-center gap-4">
+								<span className="text-sm font-medium text-white/60">
+									{selectedCharts.length} / 2 selected
+								</span>
+								<Link
+									href={`/synastry/${selectedCharts[0]}/${selectedCharts[1]}`}
+									className={`${
+										selectedCharts.length === 2 ? "opacity-100" : "opacity-30 pointer-events-none"
+									}`}
+								>
+									<button
+										type="button"
+										className="px-8 py-4 bg-[rgb(var(--color-lavender))] rounded-2xl text-[rgb(var(--color-deep-space))] font-bold hover:scale-105 transition-all shadow-[0_0_30px_rgba(184,164,232,0.3)]"
+									>
+										Analyze Harmony
+									</button>
+								</Link>
+							</div>
+						</motion.div>
+					)}
+
 					{/* Daily Energy Section */}
-					{!isLoading && charts.length > 0 && <DailyHoroscope sign={charts[0]?.sunSign || ""} />}
+					{!isLoading && charts.length > 0 && !compareMode && (
+						<DailyHoroscope sign={charts[0]?.sunSign || ""} />
+					)}
 
 					{isLoading ? (
 						<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -100,7 +165,18 @@ export default function DashboardPage() {
 							className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
 						>
 							{charts.map((chart) => (
-								<ChartCard key={chart._id} chart={chart} />
+								<button
+									type="button"
+									key={chart._id}
+									onClick={() => compareMode && toggleChartSelection(chart._id)}
+									className={`w-full text-left transition-all ${
+										compareMode && selectedCharts.includes(chart._id)
+											? "scale-[1.05] ring-2 ring-[rgb(var(--color-lavender))] rounded-3xl"
+											: ""
+									} ${!compareMode ? "cursor-default" : "cursor-pointer"}`}
+								>
+									<ChartCard chart={chart} isLink={!compareMode} />
+								</button>
 							))}
 						</motion.div>
 					)}
@@ -110,52 +186,54 @@ export default function DashboardPage() {
 	);
 }
 
-function ChartCard({ chart }: { chart: ChartSummary }) {
-	return (
-		<Link href={`/chart/${chart._id}`}>
-			<motion.div
-				variants={{
-					hidden: { opacity: 0, y: 20 },
-					show: { opacity: 1, y: 0 },
-				}}
-				className="group glass rounded-3xl p-6 space-y-6 hover:bg-white/10 transition-all duration-500 hover:scale-[1.02] border border-white/5 hover:border-white/20"
-			>
-				<div className="flex justify-between items-start">
-					<div className="p-3 bg-white/5 rounded-2xl group-hover:bg-[rgb(var(--color-lavender))]/20 transition-colors">
-						<User className="w-6 h-6 text-[rgb(var(--color-lavender))]" />
-					</div>
-					<div className="flex items-center gap-1.5 text-xs text-white/40 bg-white/5 px-3 py-1 rounded-full">
-						<Calendar className="w-3 h-3" />
-						{new Date(chart.createdAt).toLocaleDateString()}
-					</div>
+function ChartCard({ chart, isLink = true }: { chart: ChartSummary; isLink?: boolean }) {
+	const content = (
+		<motion.div
+			variants={{
+				hidden: { opacity: 0, y: 20 },
+				show: { opacity: 1, y: 0 },
+			}}
+			className="group glass rounded-3xl p-6 space-y-6 hover:bg-white/10 transition-all duration-500 hover:scale-[1.02] border border-white/5 hover:border-white/20"
+		>
+			<div className="flex justify-between items-start">
+				<div className="p-3 bg-white/5 rounded-2xl group-hover:bg-[rgb(var(--color-lavender))]/20 transition-colors">
+					<User className="w-6 h-6 text-[rgb(var(--color-lavender))]" />
 				</div>
+				<div className="flex items-center gap-1.5 text-xs text-white/40 bg-white/5 px-3 py-1 rounded-full">
+					<Calendar className="w-3 h-3" />
+					{new Date(chart.createdAt).toLocaleDateString()}
+				</div>
+			</div>
 
-				<div className="space-y-1">
-					<h3 className="text-2xl font-bold text-white group-hover:text-gradient transition-all">
-						{chart.name}
-					</h3>
-				</div>
+			<div className="space-y-1">
+				<h3 className="text-2xl font-bold text-white group-hover:text-gradient transition-all">
+					{chart.name}
+				</h3>
+			</div>
 
-				<div className="grid grid-cols-3 gap-2">
-					<SignItem
-						icon={<Sun className="w-3 h-3 text-orange-400" />}
-						sign={chart.sunSign}
-						label="Sun"
-					/>
-					<SignItem
-						icon={<Moon className="w-3 h-3 text-blue-300" />}
-						sign={chart.moonSign}
-						label="Moon"
-					/>
-					<SignItem
-						icon={<Stars className="w-3 h-3 text-purple-400" />}
-						sign={chart.risingSign}
-						label="Rising"
-					/>
-				</div>
-			</motion.div>
-		</Link>
+			<div className="grid grid-cols-3 gap-2">
+				<SignItem
+					icon={<Sun className="w-3 h-3 text-orange-400" />}
+					sign={chart.sunSign}
+					label="Sun"
+				/>
+				<SignItem
+					icon={<Moon className="w-3 h-3 text-blue-300" />}
+					sign={chart.moonSign}
+					label="Moon"
+				/>
+				<SignItem
+					icon={<Stars className="w-3 h-3 text-purple-400" />}
+					sign={chart.risingSign}
+					label="Rising"
+				/>
+			</div>
+		</motion.div>
 	);
+
+	if (!isLink) return content;
+
+	return <Link href={`/chart/${chart._id}`}>{content}</Link>;
 }
 
 function SignItem({ icon, sign, label }: { icon: React.ReactNode; sign: string; label: string }) {
