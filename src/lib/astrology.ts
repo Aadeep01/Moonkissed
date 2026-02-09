@@ -1,4 +1,4 @@
-import { Body, EclipticLongitude, MakeTime, SiderealTime } from "astronomy-engine";
+import { Body, EclipticLongitude, MakeTime, SiderealTime, SunPosition } from "astronomy-engine";
 
 const ZODIAC_SIGNS = [
 	"Aries",
@@ -37,9 +37,9 @@ export interface AstrologyResult {
 export function calculateSigns(date: Date, latitude: number, longitude: number): AstrologyResult {
 	const astroTime = MakeTime(date);
 
-	// 1. Sun Sign
-	const sunLong = EclipticLongitude(Body.Sun, astroTime);
-	const sunSign = getZodiacSign(sunLong);
+	// 1. Sun Sign - use SunPosition which returns ecliptic coordinates
+	const sunEcliptic = SunPosition(astroTime);
+	const sunSign = getZodiacSign(sunEcliptic.elon);
 
 	// 2. Moon Sign
 	const moonLong = EclipticLongitude(Body.Moon, astroTime);

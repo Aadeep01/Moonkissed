@@ -11,8 +11,9 @@ async function getChart(id: string) {
 	return JSON.parse(JSON.stringify(chart));
 }
 
-export default async function ChartPage({ params }: { params: { id: string } }) {
-	const chart = await getChart(params.id);
+export default async function ChartPage({ params }: { params: Promise<{ id: string }> }) {
+	const { id } = await params;
+	const chart = await getChart(id);
 
 	if (!chart) {
 		notFound();

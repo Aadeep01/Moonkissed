@@ -245,9 +245,9 @@ export default function OnboardingPage() {
 													exit={{ opacity: 0, y: -10 }}
 													className="absolute top-full left-0 w-full mt-2 glass rounded-2xl overflow-hidden z-50 shadow-2xl"
 												>
-													{locations.map((loc) => (
+													{locations.map((loc, index) => (
 														<button
-															key={loc.display_name}
+															key={`${loc.lat}-${loc.lon}-${index}`}
 															type="button"
 															onClick={() => {
 																setSelectedLocation(loc);

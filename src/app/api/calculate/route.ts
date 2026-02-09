@@ -8,6 +8,7 @@ export async function POST(request: Request) {
 		await dbConnect();
 		const body = await request.json();
 		const { name, birthDate, birthTime, birthPlace, latitude, longitude } = body;
+		console.log("Received data:", { name, birthDate, birthTime, birthPlace, latitude, longitude });
 
 		if (
 			!name ||
@@ -22,9 +23,11 @@ export async function POST(request: Request) {
 
 		// Prepare original date/time for library
 		const fullBirthDate = new Date(`${birthDate}T${birthTime}`);
+		console.log("Full birth date:", fullBirthDate);
 
 		// Calculate signs
 		const { sunSign, moonSign, risingSign } = calculateSigns(fullBirthDate, latitude, longitude);
+		console.log("Calculated signs:", { sunSign, moonSign, risingSign });
 
 		// Store in database
 		const chart = await BirthChart.create({
@@ -40,8 +43,10 @@ export async function POST(request: Request) {
 		});
 
 		return NextResponse.json({ id: chart._id, sunSign, moonSign, risingSign });
-	} catch (error: any) {
+	} catch (error) {
 		console.error("Calculation Error:", error);
-		return NextResponse.json({ error: error.message || "Internal Server Error" }, { status: 500 });
+		const errorMessage = error instanceof Error ? error.message : "Internal Server Error";
+		const errorStack = error instanceof Error ? error.stack : undefined;
+		return NextResponse.json({ error: errorMessage, stack: errorStack }, { status: 500 });
 	}
 }
