@@ -1,11 +1,11 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Loader2, Sparkles } from "lucide-react";
+import { ArrowRight, Loader2 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { StarField } from "@/components/StarField";
+import { CosmicBackground } from "@/components/CosmicBackground";
 
 export default function SignUpPage() {
 	const [name, setName] = useState("");
@@ -42,74 +42,102 @@ export default function SignUpPage() {
 	};
 
 	return (
-		<>
-			<StarField />
-			<main className="min-h-screen flex items-center justify-center p-4">
+		<div className="min-h-screen flex bg-[#050810] overflow-hidden relative">
+			{/* Background */}
+			<div className="absolute inset-0 z-0">
+				<CosmicBackground />
+			</div>
+
+			{/* Left Side - Art & Quote (Desktop Only) */}
+			<div className="hidden lg:flex flex-1 relative z-10 flex-col justify-center px-20 text-[rgb(var(--color-cream-white))]">
 				<motion.div
-					initial={{ opacity: 0, scale: 0.95 }}
-					animate={{ opacity: 1, scale: 1 }}
-					className="glass max-w-md w-full p-8 md:p-12 rounded-[3rem] border border-white/10 space-y-8"
+					initial={{ opacity: 0, y: 20 }}
+					animate={{ opacity: 1, y: 0 }}
+					transition={{ duration: 1, delay: 0.2 }}
 				>
-					<div className="text-center space-y-2">
-						<div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[rgb(var(--color-lavender))]/10 border border-[rgb(var(--color-lavender))]/20 text-[rgb(var(--color-lavender))] text-[10px] font-bold uppercase tracking-widest">
-							<Sparkles className="w-3 h-3" /> New Journey
-						</div>
-						<h1 className="text-4xl font-bold text-gradient">Create Account</h1>
-						<p className="text-white/40">Join the collective of cosmic seekers</p>
+					<h2 className="font-[family-name:var(--font-cormorant)] text-6xl leading-tight">
+						Your map to the <br />
+						<span className="italic text-[rgb(var(--color-moonlight-gold))]">unknown.</span>
+					</h2>
+					<div className="h-px w-20 bg-[rgb(var(--color-moonlight-gold))]/30 my-8" />
+					<p className="font-[family-name:var(--font-inter)] text-lg opacity-60 font-light max-w-md leading-relaxed">
+						"Every soul is a celestial body, moving in an orbit of its own, waiting to be
+						discovered."
+					</p>
+				</motion.div>
+			</div>
+
+			{/* Right Side - Form Panel */}
+			<motion.div
+				initial={{ x: 100, opacity: 0 }}
+				animate={{ x: 0, opacity: 1 }}
+				transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+				className="w-full lg:w-[45%] xl:w-[40%] bg-[rgb(var(--color-deep-space))]/60 backdrop-blur-2xl border-l border-white/5 relative z-20 flex flex-col justify-center p-8 md:p-16 lg:p-20 shadow-2xl"
+			>
+				<div className="max-w-sm mx-auto w-full space-y-10">
+					<div className="space-y-4">
+						<Link href="/">
+							<h1 className="font-[family-name:var(--font-cormorant)] text-3xl text-[rgb(var(--color-cream-white))] tracking-wide hover:opacity-80 transition-opacity">
+								Moonkissed
+							</h1>
+						</Link>
+						<p className="font-[family-name:var(--font-inter)] text-[rgb(var(--color-cream-white))]/40 text-sm">
+							Begin your journey.
+						</p>
 					</div>
 
-					<form onSubmit={handleSubmit} className="space-y-6">
-						<div className="space-y-4">
-							<div className="space-y-1.5">
-								<label
-									htmlFor="name"
-									className="text-xs font-bold uppercase tracking-wider text-white/60 ml-1"
-								>
-									Full Name
-								</label>
+					<form onSubmit={handleSubmit} className="space-y-8">
+						<div className="space-y-6">
+							<div className="group relative">
 								<input
 									id="name"
 									type="text"
 									required
 									value={name}
 									onChange={(e) => setName(e.target.value)}
-									className="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 text-white focus:outline-none focus:ring-2 focus:ring-[rgb(var(--color-lavender))]/50 transition-all"
-									placeholder="Celestial Voyager"
+									className="peer w-full bg-transparent border-b border-white/20 py-3 text-[rgb(var(--color-cream-white))] focus:outline-none focus:border-[rgb(var(--color-moonlight-gold))] transition-colors font-[family-name:var(--font-inter)] placeholder-transparent"
+									placeholder="Full Name"
 								/>
-							</div>
-							<div className="space-y-1.5">
 								<label
-									htmlFor="email"
-									className="text-xs font-bold uppercase tracking-wider text-white/60 ml-1"
+									htmlFor="name"
+									className="absolute left-0 -top-3.5 text-[rgb(var(--color-moonlight-gold))]/80 text-xs transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-white/40 peer-placeholder-shown:top-3 peer-focus:-top-3.5 peer-focus:text-[rgb(var(--color-moonlight-gold))] peer-focus:text-xs pointer-events-none"
 								>
-									Email Address
+									Full Name
 								</label>
+							</div>
+							<div className="group relative">
 								<input
 									id="email"
 									type="email"
 									required
 									value={email}
 									onChange={(e) => setEmail(e.target.value)}
-									className="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 text-white focus:outline-none focus:ring-2 focus:ring-[rgb(var(--color-lavender))]/50 transition-all"
-									placeholder="your@email.com"
+									className="peer w-full bg-transparent border-b border-white/20 py-3 text-[rgb(var(--color-cream-white))] focus:outline-none focus:border-[rgb(var(--color-moonlight-gold))] transition-colors font-[family-name:var(--font-inter)] placeholder-transparent"
+									placeholder="Email"
 								/>
-							</div>
-							<div className="space-y-1.5">
 								<label
-									htmlFor="password"
-									className="text-xs font-bold uppercase tracking-wider text-white/60 ml-1"
+									htmlFor="email"
+									className="absolute left-0 -top-3.5 text-[rgb(var(--color-moonlight-gold))]/80 text-xs transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-white/40 peer-placeholder-shown:top-3 peer-focus:-top-3.5 peer-focus:text-[rgb(var(--color-moonlight-gold))] peer-focus:text-xs pointer-events-none"
 								>
-									Password
+									Email Address
 								</label>
+							</div>
+							<div className="group relative">
 								<input
 									id="password"
 									type="password"
 									required
 									value={password}
 									onChange={(e) => setPassword(e.target.value)}
-									className="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 text-white focus:outline-none focus:ring-2 focus:ring-[rgb(var(--color-lavender))]/50 transition-all"
-									placeholder="••••••••"
+									className="peer w-full bg-transparent border-b border-white/20 py-3 text-[rgb(var(--color-cream-white))] focus:outline-none focus:border-[rgb(var(--color-moonlight-gold))] transition-colors font-[family-name:var(--font-inter)] placeholder-transparent"
+									placeholder="Password"
 								/>
+								<label
+									htmlFor="password"
+									className="absolute left-0 -top-3.5 text-[rgb(var(--color-moonlight-gold))]/80 text-xs transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-white/40 peer-placeholder-shown:top-3 peer-focus:-top-3.5 peer-focus:text-[rgb(var(--color-moonlight-gold))] peer-focus:text-xs pointer-events-none"
+								>
+									Password
+								</label>
 							</div>
 						</div>
 
@@ -117,36 +145,45 @@ export default function SignUpPage() {
 							<motion.div
 								initial={{ opacity: 0, y: -10 }}
 								animate={{ opacity: 1, y: 0 }}
-								className="text-red-400 text-sm text-center font-medium"
+								className="text-red-300/80 text-xs tracking-wide"
 							>
 								{error}
 							</motion.div>
 						)}
 
-						<button
-							type="submit"
-							disabled={isLoading}
-							className="w-full relative group px-8 py-4 bg-gradient-to-r from-[rgb(var(--color-lavender))] to-[rgb(var(--color-celestial-pink))] rounded-2xl text-[rgb(var(--color-deep-space))] font-bold hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-50 disabled:cursor-not-allowed overflow-hidden"
-						>
-							<div className="relative flex items-center justify-center gap-2">
-								{isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : "Create Account"}
-							</div>
-						</button>
+						<div className="pt-4">
+							<button
+								type="submit"
+								disabled={isLoading}
+								className="group flex items-center justify-between w-full py-4 border-b border-[rgb(var(--color-cream-white))]/20 hover:border-[rgb(var(--color-moonlight-gold))] transition-all duration-300"
+							>
+								<span className="font-[family-name:var(--font-cormorant)] text-xl text-[rgb(var(--color-cream-white))] group-hover:text-[rgb(var(--color-moonlight-gold))] transition-colors">
+									{isLoading ? "Initiating..." : "Initiate Protocol"}
+								</span>
+								<div className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center group-hover:bg-[rgb(var(--color-moonlight-gold))] group-hover:border-transparent transition-all duration-300">
+									{isLoading ? (
+										<Loader2 className="w-4 h-4 animate-spin text-[rgb(var(--color-cream-white))]" />
+									) : (
+										<ArrowRight className="w-4 h-4 text-[rgb(var(--color-cream-white))] group-hover:text-[rgb(var(--color-deep-space))]" />
+									)}
+								</div>
+							</button>
+						</div>
 					</form>
 
-					<div className="text-center">
-						<p className="text-white/40 text-sm">
-							Already have an account?{" "}
+					<div className="pt-10">
+						<p className="text-[rgb(var(--color-cream-white))]/40 text-xs font-[family-name:var(--font-inter)]">
+							Already initiated?{" "}
 							<Link
 								href="/auth/signin"
-								className="text-[rgb(var(--color-lavender))] hover:underline font-bold"
+								className="text-[rgb(var(--color-cream-white))] hover:text-[rgb(var(--color-moonlight-gold))] transition-colors ml-1 decoration-1 underline-offset-4 hover:underline"
 							>
-								Sign In
+								Return
 							</Link>
 						</p>
 					</div>
-				</motion.div>
-			</main>
-		</>
+				</div>
+			</motion.div>
+		</div>
 	);
 }
