@@ -39,7 +39,7 @@ The design system for Moonkissed focuses on an "Elegant Mysticism" aesthetic, pr
 **Infrastructure and Setup:**
 *   Initialize Next.js 14 project utilizing the App Router and TypeScript.
 *   Configure Tailwind CSS with a custom design system theme.
-*   Implement Prisma ORM with a PostgreSQL database.
+*   Implement Mongoose ODM for MongoDB data modeling and connection management.
 *   Integrate Framer Motion for high-performance UI animations.
 *   Define project architecture and directory structure.
 
@@ -54,23 +54,38 @@ The design system for Moonkissed focuses on an "Elegant Mysticism" aesthetic, pr
     *   Input collection: Name, Birth Date, Birth Time (with AM/PM), and Birth Location.
     *   Integration of geocoding for precise location coordinates.
 
-**Database Schema (Prisma):**
-```prisma
-model BirthChart {
-  id          String   @id @default(cuid())
-  name        String
-  birthDate   DateTime
-  birthTime   String
-  birthPlace  String
-  latitude    Float
-  longitude   Float
-  
-  sunSign     String
-  moonSign    String
-  risingSign  String
-  
-  createdAt   DateTime @default(now())
+**Database Model (Mongoose):**
+```typescript
+import mongoose, { Schema, Document } from "mongoose";
+
+export interface IBirthChart extends Document {
+  name: string;
+  birthDate: Date;
+  birthTime: string;
+  birthPlace: string;
+  latitude: number;
+  longitude: number;
+  sunSign: string;
+  moonSign: string;
+  risingSign: string;
+  createdAt: Date;
 }
+
+const BirthChartSchema: Schema = new Schema({
+  name: { type: String, required: true },
+  birthDate: { type: Date, required: true },
+  birthTime: { type: String, required: true },
+  birthPlace: { type: String, required: true },
+  latitude: { type: Number, required: true },
+  longitude: { type: Number, required: true },
+  sunSign: { type: String, required: true },
+  moonSign: { type: String, required: true },
+  risingSign: { type: String, required: true },
+  createdAt: { type: Date, default: Date.now },
+});
+
+export default mongoose.models.BirthChart || 
+  mongoose.model<IBirthChart>("BirthChart", BirthChartSchema);
 ```
 
 ### Phase 2: Core Functionality
@@ -111,9 +126,9 @@ model BirthChart {
 
 ### Tech Stack
 *   **Frontend:** Next.js 14, TypeScript, Tailwind CSS, Framer Motion, Lucide React.
-*   **Backend:** Next.js API Routes, Prisma ORM, PostgreSQL.
+*   **Backend:** Next.js API Routes, Mongoose ODM, MongoDB (Local Docker / Atlas).
 *   **AI/ML:** Groq API (Llama 3.3 70B, GPT-OSS 120B, or Llama 3.1 8B).
-*   **Infrastructure:** Vercel (Hosting/Database), Geocoding API (Mapbox or OpenCage).
+*   **Infrastructure:** Docker (Local Development), MongoDB Atlas (Production), Vercel (Hosting), Geocoding API (Mapbox or OpenCage).
 
 ## Future Considerations
 *   Expansion into Vedic astrology options.
