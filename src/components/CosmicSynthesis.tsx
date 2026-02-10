@@ -109,13 +109,13 @@ export function CosmicSynthesis({
 									key={tab.key}
 									onClick={() => setActiveTab(tab.key)}
 									className={cn(
-										"flex flex-col md:flex-row items-center justify-center gap-2 py-4 transition-all duration-300 text-[10px] md:text-xs font-bold uppercase tracking-widest relative group",
+										"flex flex-col md:flex-row items-center justify-center gap-1.5 py-3 transition-all duration-300 text-[9px] md:text-xs font-bold uppercase tracking-widest relative group",
 										isActive
 											? "text-[rgb(var(--color-moonlight-gold))]"
 											: "text-white/40 hover:text-white",
 									)}
 								>
-									<span className="relative z-10">{tab.icon}</span>
+									<span className="relative z-10 scale-90 md:scale-100">{tab.icon}</span>
 									<span className="relative z-10 hidden md:inline">{tab.label}</span>
 									<span className="relative z-10 md:hidden">{tab.label.split(" ")[0]}</span>
 
@@ -133,7 +133,7 @@ export function CosmicSynthesis({
 				</div>
 
 				{/* Content */}
-				<div className="relative min-h-[400px] p-8 md:p-12 flex items-center justify-center">
+				<div className="relative min-h-[320px] md:min-h-[380px] p-6 md:p-10 flex items-center justify-center">
 					<AnimatePresence mode="wait">
 						{isLoading ? (
 							<motion.div
@@ -141,10 +141,10 @@ export function CosmicSynthesis({
 								initial={{ opacity: 0 }}
 								animate={{ opacity: 1 }}
 								exit={{ opacity: 0 }}
-								className="flex flex-col items-center justify-center gap-4 text-[rgb(var(--color-moonlight-gold))]"
+								className="flex flex-col items-center justify-center gap-3 text-[rgb(var(--color-moonlight-gold))]"
 							>
-								<Loader2 className="w-8 h-8 animate-spin" />
-								<span className="text-xs uppercase tracking-[0.2em] animate-pulse">
+								<Loader2 className="w-6 h-6 animate-spin" />
+								<span className="text-[10px] uppercase tracking-[0.2em] animate-pulse">
 									Divining...
 								</span>
 							</motion.div>
@@ -157,20 +157,20 @@ export function CosmicSynthesis({
 								transition={{ duration: 0.5, ease: "easeOut" }}
 								className="w-full max-w-2xl text-center"
 							>
-								<div className="mb-8">
-									<div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-[rgb(var(--color-moonlight-gold))]/10 text-[rgb(var(--color-moonlight-gold))] mb-4 border border-[rgb(var(--color-moonlight-gold))]/20">
+								<div className="mb-6">
+									<div className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-[rgb(var(--color-moonlight-gold))]/10 text-[rgb(var(--color-moonlight-gold))] mb-3 border border-[rgb(var(--color-moonlight-gold))]/20">
 										{TABS.find((t) => t.key === activeTab)?.icon}
 									</div>
-									<h3 className="font-[family-name:var(--font-cormorant)] text-3xl md:text-5xl text-[rgb(var(--color-cream-white))] leading-tight mb-4">
+									<h3 className="font-[family-name:var(--font-cormorant)] text-2xl md:text-4xl text-[rgb(var(--color-cream-white))] leading-tight mb-3">
 										{activeTab === "core_identity" && "The Soul's Signature"}
 										{activeTab === "emotional_world" && "The Inner Tides"}
 										{activeTab === "mind_and_heart" && "Thought & Affection"}
 										{activeTab === "destiny_path" && "The Path Forward"}
 									</h3>
-									<div className="h-px w-24 bg-gradient-to-r from-transparent via-[rgb(var(--color-moonlight-gold))]/50 to-transparent mx-auto" />
+									<div className="h-px w-16 bg-gradient-to-r from-transparent via-[rgb(var(--color-moonlight-gold))]/50 to-transparent mx-auto" />
 								</div>
 
-								<p className="font-[family-name:var(--font-cormorant)] text-xl md:text-2xl leading-relaxed text-[rgb(var(--color-cream-white))]/90 font-light italic">
+								<p className="font-[family-name:var(--font-cormorant)] text-lg md:text-xl leading-relaxed text-[rgb(var(--color-cream-white))]/85 font-light italic">
 									"{synthesis[activeTab]}"
 								</p>
 							</motion.div>

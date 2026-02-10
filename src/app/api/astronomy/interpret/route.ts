@@ -92,7 +92,7 @@ export async function POST(request: Request) {
 						.join("\n")
 				: "No major aspects currently active";
 
-		const prompt = `You are an astrologer. Be direct and concise.
+		const prompt = `You are an astrologer. Provide your response as a JSON object. Be direct and concise.
 
 CHART: ${targetDate}
 
@@ -104,7 +104,7 @@ ${aspectInfo}
 
 MOON: ${moonPhase.phaseName} (${moonPhase.illumination.toFixed(1)}%)
 
-Respond with SHORT sentences (1-2 lines each):
+Return ONLY a JSON object with these keys:
 
 1. "energetic_tone" - One sentence on the overall energy
 2. "key_aspects" - 1-2 most significant aspects briefly
@@ -119,7 +119,8 @@ Keep it brief. No poetic language.`;
 			messages: [
 				{
 					role: "system",
-					content: "You are a direct astrologer. Keep responses brief and actionable.",
+					content:
+						"You are a direct astrologer. You MUST respond with a valid JSON object. Keep responses brief and actionable.",
 				},
 				{
 					role: "user",
